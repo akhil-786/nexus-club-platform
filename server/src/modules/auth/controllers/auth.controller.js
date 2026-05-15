@@ -11,6 +11,9 @@ const registerUser = async (req, res) => {
       fullName,
       email,
       password,
+      rollNumber,
+      department,
+      year,
       collegeId,
       clubId,
     } = req.body;
@@ -21,9 +24,12 @@ const registerUser = async (req, res) => {
       !fullName ||
       !email ||
       !password ||
+      !rollNumber ||
+      !department ||
+      !year ||
       !collegeId ||
       !clubId
-    ) {
+    ){
       return res.status(400).json({
         success: false,
         message: "All fields are required",
@@ -66,9 +72,12 @@ const registerUser = async (req, res) => {
 
     // Create User
     const user = await User.create({
-      fullName,
       email,
+      fullName,
       password: hashedPassword,
+      rollNumber,
+      department,
+      year,
       collegeId,
       clubId,
     });
@@ -79,6 +88,9 @@ const registerUser = async (req, res) => {
         fullName: user.fullName,
         email: user.email,
         role: user.role,
+        rollNumber: user.rollNumber,
+        department: user.department,
+        year: user.year,
         collegeId: user.collegeId,
         clubId: user.clubId,
         status: user.status,
@@ -174,6 +186,9 @@ const loginUser = async (req, res) => {
             fullName: user.fullName,
             email: user.email,
             role: user.role,
+            rollNumber: user.rollNumber,
+            department: user.department,
+            year: user.year,
             collegeId: user.collegeId,
             clubId: user.clubId,
             status: user.status,

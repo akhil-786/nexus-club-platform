@@ -16,6 +16,27 @@ const userSchema = new mongoose.Schema(
             trim: true,
         },
 
+        rollNumber: {
+          type: String,
+          required: true,
+          uppercase: true,
+          trim: true,
+        },
+        
+        department: {
+          type: String,
+          required: true,
+          trim: true,
+          uppercase: true,
+        },
+        
+        year: {
+          type: Number,
+          required: true,
+          min: 1,
+          max: 4,
+        },
+
         password: {
             type : String,
             required: true,
