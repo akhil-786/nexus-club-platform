@@ -4,7 +4,8 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const authRoutes = require("./modules/auth/routes/auth.routes");
-
+const clubRoutes = require("./modules/clubs/routes/club.routes")
+const eventRoutes = require("./modules/events/routes/event.routes");
 const app = express();
 
 
@@ -35,6 +36,9 @@ app.use(cookieParser());
 
 app.use("/api/auth",authRoutes);
 
+app.use("/api/clubs",clubRoutes);
+
+app.use("/api/events", eventRoutes);
 // Health Check Route
 app.get("/", (req, res) => {
   res.status(200).json({
@@ -42,6 +46,7 @@ app.get("/", (req, res) => {
     message: "Nexus Club API is running...",
   });
 });
+
 
 
 module.exports = app;

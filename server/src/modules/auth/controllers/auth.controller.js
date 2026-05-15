@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const User = require("../models/user.model");
 
+const Club = require("../../clubs/models/club.model");
 
 const registerUser = async (req, res) => {
   try {
@@ -170,11 +171,12 @@ const loginUser = async (req, res) => {
         }
 
         const token = jwt.sign(
-            {
-                id: user._id,
-                role: user.role,
-                collegeId: user.collegeId,
-            },
+          {
+            id: user._id,
+            role: user.role,
+            collegeId: user.collegeId,
+            clubId: user.clubId,
+          },
             process.env.JWT_SECRET,
             {
                 expiresIn: "7d",
@@ -249,8 +251,32 @@ const approveUser = async (req, res) => {
   
   
       user.status = "approved";
-  
+
       await user.save();
+
+
+      // Find Club
+      const club = await Club.findById(
+        user.clubId
+      );
+
+      if (club) {
+      
+        // Prevent Duplicate Members
+        const alreadyMember =
+          club.members.some(
+            (memberId) =>
+              memberId.toString() ===
+              user._id.toString()
+          );
+        
+        if (!alreadyMember) {
+        
+          club.members.push(user._id);
+        
+          await club.save();
+        }
+      }
   
   
       return res.status(200).json({
