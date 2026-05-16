@@ -6,6 +6,9 @@ const {
   deleteEvent,
   registerForEvent,
   markAttendance,
+  getAllEvents,
+  getSingleEvent,
+  getClubEvents,
 } = require("../controllers/event.controller");
 
 const {
@@ -14,6 +17,8 @@ const {
 } = require(
   "../../../middleware/auth.middleware"
 );
+
+const { checkClubAccess } = require("../../../middleware/clubAccess.middleware");
 
 const router = express.Router();
 
@@ -48,6 +53,25 @@ router.put("/attendance/:eventId",
     protect,
     authorizeRoles("club_admin"),
     markAttendance
+);
+
+router.get(
+  "/",
+  protect,
+  getAllEvents
+);
+
+router.get(
+  "/club/:clubId",
+  protect,
+  checkClubAccess,
+  getClubEvents
+);
+
+router.get(
+  "/:eventId",
+  protect,
+  getSingleEvent
 );
 
 module.exports = router;

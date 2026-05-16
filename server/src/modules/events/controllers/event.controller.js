@@ -455,10 +455,248 @@ const markAttendance = async (
   }
 };
 
+const getAllEvents = async (
+  req,
+  res
+) => {
+  try {
+
+    let events = [];
+
+
+    // STUDENT
+    if (
+      req.user.role === "student"
+    ) {
+
+      events = await Event.find({
+        clubId: req.user.clubId,
+      })
+        .populate(
+          "clubId",
+          "name category"
+        )
+        .populate(
+          "createdBy",
+          "fullName email"
+        )
+        .sort({ createdAt: -1 });
+    }
+
+
+    // CLUB ADMIN
+    else if (
+      req.user.role === "club_admin"
+    ) {
+
+      const managedClubs =
+        await Club.find({
+          clubAdmins: req.user.id,
+        });
+
+      const clubIds = managedClubs.map(
+        (club) => club._id
+      );
+
+      events = await Event.find({
+        clubId: { $in: clubIds },
+      })
+        .populate(
+          "clubId",
+          "name category"
+        )
+        .populate(
+          "createdBy",
+          "fullName email"
+        )
+        .sort({ createdAt: -1 });
+    }
+
+
+    // COLLEGE ADMIN
+    else if (
+      req.user.role ===
+      "college_admin"
+    ) {
+
+      const collegeClubs =
+        await Club.find({
+          collegeId:
+            req.user.collegeId,
+        });
+
+      const clubIds =
+        collegeClubs.map(
+          (club) => club._id
+        );
+
+      events = await Event.find({
+        clubId: { $in: clubIds },
+      })
+        .populate(
+          "clubId",
+          "name category"
+        )
+        .populate(
+          "createdBy",
+          "fullName email"
+        )
+        .sort({ createdAt: -1 });
+    }
+
+
+    return res.status(200).json({
+      success: true,
+      count: events.length,
+      events,
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
+const getSingleEvent = async (
+  req,
+  res
+) => {
+  try {
+
+    const { eventId } = req.params;
+
+
+    const event = await Event.findById(
+      eventId
+    )
+      .populate(
+        "clubId",
+        "name category"
+      )
+      .populate(
+        "createdBy",
+        "fullName email"
+      )
+      .populate(
+        "participants",
+        "fullName email rollNumber"
+      )
+      .populate(
+        "attendance",
+        "fullName email rollNumber"
+      );
+
+
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: "Event not found",
+      });
+    }
+
+
+    // STUDENT ACCESS CONTROL
+    if (
+      req.user.role === "student"
+    ) {
+
+      if (
+        req.user.clubId.toString() !==
+        event.clubId._id.toString()
+      ) {
+
+        return res.status(403).json({
+          success: false,
+          message:
+            "Access denied for this event",
+        });
+      }
+    }
+
+
+    // CLUB ADMIN ACCESS CONTROL
+    if (
+      req.user.role === "club_admin"
+    ) {
+
+      const club = await Club.findById(
+        event.clubId._id
+      );
+
+      const isAdmin =
+        club.clubAdmins.some(
+          (adminId) =>
+            adminId.toString() ===
+            req.user.id
+        );
+
+      if (!isAdmin) {
+
+        return res.status(403).json({
+          success: false,
+          message:
+            "Access denied for this event",
+        });
+      }
+    }
+
+
+    return res.status(200).json({
+      success: true,
+      event,
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
+const getClubEvents = async(req,res) => {
+  try{
+    const {clubId} = req.params;
+
+    const events = await Event.find({
+
+      clubId,
+    })
+    .populate(
+      "createdBy",
+      "fullName email"
+    ).sort({eventDate: 1 });
+
+    return res.status(200).json({
+      success: true,
+      count: events.length,
+      events,
+    });
+  } catch(error){
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
 module.exports = {
   createEvent,
   updateEvent,
   deleteEvent,
   registerForEvent,
   markAttendance,
+  getAllEvents,
+  getSingleEvent,
+  getClubEvents,
 };
