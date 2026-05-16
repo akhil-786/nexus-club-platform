@@ -1,3 +1,1262 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* =========================
+   GLOBAL
+========================= */
+
+body {
+  font-family: "Inter", sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+  overflow-x: hidden;
+}
+
+
+/* =========================
+   LAYOUTS
+========================= */
+
+.page-container {
+  @apply relative min-h-screen overflow-hidden;
+}
+
+.section-center {
+  @apply min-h-screen flex flex-col items-center justify-center text-center px-6;
+}
+
+
+/* =========================
+   BACKGROUND GLOWS
+========================= */
+
+.glow-purple {
+  @apply absolute top-[-150px] left-[-150px]
+  w-[400px] h-[400px]
+  bg-purple-500 opacity-20
+  blur-[120px] rounded-full;
+}
+
+.glow-cyan {
+  @apply absolute bottom-[-150px] right-[-150px]
+  w-[400px] h-[400px]
+  bg-cyan-400 opacity-20
+  blur-[120px] rounded-full;
+}
+
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+  @apply w-full flex items-center justify-between
+  px-8 py-6
+  backdrop-blur-md
+  bg-white/70
+  border-b border-gray-200
+  fixed top-0 z-50;
+}
+
+.logo-text {
+  @apply text-2xl font-bold tracking-wide
+  text-slate-900;
+}
+
+.nav-links {
+  @apply flex items-center gap-6;
+}
+
+.nav-link {
+  @apply text-slate-600
+  hover:text-slate-900
+  transition
+  font-medium;
+}
+
+.nav-button {
+  @apply bg-slate-900 text-white
+  px-5 py-2 rounded-full
+  font-medium hover:scale-105
+  transition;
+}
+
+
+/* =========================
+   HERO SECTION
+========================= */
+
+.hero-title {
+  @apply text-6xl md:text-8xl
+  font-black leading-tight
+  max-w-5xl text-slate-900;
+}
+
+.gradient-text {
+  @apply bg-gradient-to-r
+  from-cyan-500 to-purple-600
+  bg-clip-text text-transparent;
+}
+
+.hero-description {
+  @apply mt-8 text-gray-600
+  max-w-2xl text-lg md:text-xl
+  leading-relaxed;
+}
+
+.hero-buttons {
+  @apply mt-10 flex gap-4 flex-wrap justify-center;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.primary-btn {
+  @apply px-8 py-4 rounded-full
+  bg-gradient-to-r
+  from-cyan-500 to-purple-600
+  text-white font-semibold
+  shadow-lg shadow-cyan-200/50
+  hover:scale-105
+  transition duration-300;
+}
+
+.secondary-btn {
+  @apply px-8 py-4 rounded-full
+  border border-gray-300
+  bg-white/80
+  hover:bg-gray-100
+  transition duration-300;
+}
+
+
+/* =========================
+   GLASS CARDS
+========================= */
+
+.glass-card {
+  @apply backdrop-blur-xl
+  bg-white/60
+  border border-white/40
+  shadow-xl
+  rounded-3xl;
+}
+
+/* =========================
+   CLUB CARDS
+========================= */
+
+.club-grid {
+  @apply grid grid-cols-1
+  md:grid-cols-2 lg:grid-cols-3
+  gap-8 mt-16;
+}
+
+.club-card {
+  @apply relative p-8 rounded-3xl
+  text-white overflow-hidden
+  shadow-xl cursor-pointer
+  min-h-[280px]
+  flex flex-col justify-between;
+}
+
+.club-icon {
+  @apply w-16 h-16 rounded-2xl
+  bg-white/20 flex items-center
+  justify-center backdrop-blur-md
+  text-white;
+}
+
+.club-title {
+  @apply text-3xl font-bold mt-8;
+}
+
+.club-description {
+  @apply text-white/80 mt-4
+  leading-relaxed;
+}
+
+/* =========================
+   EVENT SECTION
+========================= */
+
+.events-grid {
+  @apply grid grid-cols-1
+  md:grid-cols-2 lg:grid-cols-3
+  gap-8 mt-16;
+}
+
+.event-card {
+  @apply relative rounded-3xl
+  overflow-hidden min-h-[320px]
+  text-white shadow-2xl
+  cursor-pointer;
+}
+
+.event-overlay {
+  @apply absolute inset-0
+  bg-black/20;
+}
+
+.event-content {
+  @apply relative z-10
+  p-8 h-full flex
+  flex-col justify-between;
+}
+
+.event-date {
+  @apply flex items-center gap-2
+  bg-white/20 backdrop-blur-md
+  w-fit px-4 py-2 rounded-full
+  text-sm font-medium;
+}
+
+.event-title {
+  @apply text-4xl font-black
+  leading-tight mt-10;
+}
+
+.event-meta {
+  @apply flex flex-col gap-4 mt-10;
+}
+
+.event-meta-item {
+  @apply flex items-center gap-3
+  text-white/90;
+}
+
+/* =========================
+   CTA SECTION
+========================= */
+
+.cta-section {
+  @apply relative py-32 mt-24;
+}
+
+.cta-container {
+  @apply max-w-5xl mx-auto
+  rounded-[40px]
+  px-10 py-24
+  text-center relative
+  overflow-hidden;
+}
+
+.cta-gradient {
+  @apply absolute inset-0
+  bg-gradient-to-r
+  from-cyan-500 to-purple-600;
+}
+
+.cta-overlay {
+  @apply absolute inset-0
+  bg-black/10;
+}
+
+.cta-content {
+  @apply relative z-10;
+}
+
+.cta-title {
+  @apply text-5xl md:text-7xl
+  font-black text-white
+  leading-tight;
+}
+
+.cta-description {
+  @apply mt-8 text-white/80
+  text-lg md:text-xl
+  max-w-2xl mx-auto;
+}
+
+.cta-buttons {
+  @apply mt-10 flex flex-wrap
+  items-center justify-center gap-4;
+}
+
+.white-btn {
+  @apply px-8 py-4 rounded-full
+  bg-white text-slate-900
+  font-semibold hover:scale-105
+  transition duration-300;
+}
+
+.glass-btn {
+  @apply px-8 py-4 rounded-full
+  border border-white/30
+  bg-white/10 text-white
+  backdrop-blur-md
+  hover:bg-white/20
+  transition duration-300;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer {
+  @apply py-12 text-center
+  border-t border-gray-200
+  mt-20;
+}
+
+.footer-title {
+  @apply text-2xl font-bold
+  text-slate-900;
+}
+
+.footer-text {
+  @apply mt-4 text-gray-500;
+}
+
+
+/* =========================
+   AUTH PAGES
+========================= */
+
+.auth-page {
+  @apply min-h-screen
+  flex items-center justify-center
+  px-6 relative overflow-hidden;
+}
+
+.auth-card {
+  @apply relative z-10
+  w-full max-w-md
+  p-10 rounded-[32px]
+  backdrop-blur-2xl
+  bg-white/70
+  border border-white/40
+  shadow-2xl;
+}
+
+.auth-title {
+  @apply text-4xl font-black
+  text-slate-900 text-center;
+}
+
+.auth-subtitle {
+  @apply mt-4 text-gray-600
+  text-center leading-relaxed;
+}
+
+.auth-form {
+  @apply mt-10 flex flex-col gap-6;
+}
+
+.input-group {
+  @apply flex flex-col gap-2;
+}
+
+.input-label {
+  @apply text-sm font-semibold
+  text-slate-700;
+}
+
+.auth-input {
+  @apply w-full px-5 py-4
+  rounded-2xl border
+  border-gray-200
+  bg-white/80
+  outline-none
+  focus:ring-2
+  focus:ring-cyan-400
+  transition;
+}
+
+.auth-submit-btn {
+  @apply w-full py-4 rounded-2xl
+  bg-gradient-to-r
+  from-cyan-500 to-purple-600
+  text-white font-semibold
+  hover:scale-[1.02]
+  transition duration-300;
+}
+
+.auth-footer-text {
+  @apply mt-6 text-center
+  text-gray-600;
+}
+
+.auth-link {
+  @apply text-cyan-600
+  font-semibold hover:underline;
+}
+
+/* =========================
+   REGISTER FORM
+========================= */
+
+.register-grid {
+  @apply grid grid-cols-1
+  md:grid-cols-2 gap-6;
+}
+
+.auth-select {
+  @apply w-full px-5 py-4
+  rounded-2xl border
+  border-gray-200
+  bg-white/80
+  outline-none
+  focus:ring-2
+  focus:ring-purple-400
+  transition;
+}
+
+
+
+
+/* EVENT GRADIENTS */
+
+.event-gradient-1 {
+  @apply bg-gradient-to-br
+  from-indigo-600 to-purple-700;
+}
+
+.event-gradient-2 {
+  @apply bg-gradient-to-br
+  from-cyan-500 to-blue-700;
+}
+
+.event-gradient-3 {
+  @apply bg-gradient-to-br
+  from-pink-500 to-orange-500;
+}
+
+/* CARD GRADIENTS */
+
+.gradient-purple {
+  @apply bg-gradient-to-br
+  from-purple-500 to-indigo-600;
+}
+
+.gradient-cyan {
+  @apply bg-gradient-to-br
+  from-cyan-500 to-blue-600;
+}
+
+.gradient-pink {
+  @apply bg-gradient-to-br
+  from-pink-500 to-rose-600;
+}
+
+
+
+
+/* =========================
+   SECTION HEADINGS
+========================= */
+
+.section-title {
+  @apply text-4xl md:text-5xl
+  font-bold text-slate-900;
+}
+
+.section-description {
+  @apply mt-4 text-gray-600
+  max-w-2xl mx-auto
+  text-lg;
+}
+
+
+/* =========================
+   CONTAINERS
+========================= */
+
+.main-container {
+  @apply max-w-7xl mx-auto px-6;
+}
+
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* =========================
+  @apply flex items-center
+  justify-between;
+}
+
+.dashboard-section-title {
+  @apply text-4xl font-bold
+  text-slate-900;
+}
+
+.dashboard-section-link {
+  @apply text-cyan-600
+  font-semibold cursor-pointer;
+}
+
+
+/* EVENT CARDS */
+
+.dashboard-events-grid {
+  @apply grid grid-cols-1
+  lg:grid-cols-2 gap-8 mt-10;
+}
+
+.dashboard-event-card {
+  @apply relative overflow-hidden
+  rounded-[32px]
+  p-8 text-white
+  shadow-2xl;
+}
+
+.dashboard-event-title {
+  @apply text-3xl font-black;
+}
+
+.dashboard-event-description {
+  @apply mt-5 text-white/80
+  leading-relaxed;
+}
+
+.dashboard-event-footer {
+  @apply mt-10 flex items-center
+  justify-between;
+}
+
+.dashboard-event-date {
+  @apply bg-white/20 backdrop-blur-md
+  px-5 py-2 rounded-full
+  text-sm font-medium;
+}
+
+.dashboard-event-button {
+  @apply px-5 py-2 rounded-full
+  bg-white text-slate-900
+  font-semibold;
+}
+
+
+/* EVENT GRADIENTS */
+
+.dashboard-gradient-1 {
+  @apply bg-gradient-to-br
+  from-indigo-600 to-purple-700;
+}
+
+.dashboard-gradient-2 {
+  @apply bg-gradient-to-br
+  from-cyan-500 to-blue-700;
+}
+
+/* =========================
+   DASHBOARD NAVBAR
+========================= */
+
+.dashboard-navbar {
+  @apply fixed top-0 left-0 w-full
+  z-50 py-5
+  bg-white/70
+  backdrop-blur-xl
+  border-b border-gray-200;
+}
+
+.dashboard-navbar-content {
+  @apply max-w-7xl mx-auto
+  px-6 flex items-center
+  justify-between;
+}
+
+.dashboard-navbar-left {
+  @apply flex items-center gap-3;
+}
+
+.dashboard-logo {
+  @apply text-2xl font-black
+  text-slate-900;
+}
+
+
+/* NAVIGATION */
+
+.dashboard-nav-links {
+  @apply hidden lg:flex
+  items-center gap-3;
+}
+
+.dashboard-nav-item {
+  @apply px-5 py-2 rounded-full
+  text-slate-600 font-medium
+  hover:bg-slate-100
+  transition duration-300;
+}
+
+.dashboard-nav-active {
+  @apply bg-gradient-to-r
+  from-cyan-500 to-purple-600
+  text-white shadow-lg;
+}
+
+
+/* PROFILE */
+
+.dashboard-profile {
+  @apply flex items-center gap-3;
+}
+
+.dashboard-profile-avatar {
+  @apply w-11 h-11 rounded-full
+  bg-gradient-to-r
+  from-cyan-500 to-purple-600
+  text-white font-bold
+  flex items-center justify-center;
+}
+
+/* =========================
+   DASHBOARD LAYOUT
+========================= */
+
+.dashboard-page {
+  @apply relative min-h-screen
+  overflow-hidden;
+}
+
+.dashboard-main-content {
+  @apply max-w-7xl mx-auto
+  px-6 pt-36 pb-20;
+}
+
+/* =========================
+   ANALYTICS
+========================= */
+
+.analytics-grid {
+  @apply grid grid-cols-1
+  md:grid-cols-2 xl:grid-cols-4
+  gap-6 mt-14;
+}
+
+.analytics-card {
+  @apply p-6 transition duration-300
+  hover:translate-y-[-4px];
+}
+
+.analytics-card-top {
+  @apply flex items-center
+  justify-between;
+}
+
+.analytics-label {
+  @apply text-gray-500
+  font-medium;
+}
+
+.analytics-indicator {
+  @apply w-3 h-3 rounded-full
+  bg-gradient-to-r
+  from-cyan-500 to-purple-600;
+}
+
+.analytics-value {
+  @apply mt-5 text-4xl
+  font-black text-slate-900;
+}
+
+.analytics-growth {
+  @apply mt-3 text-sm
+  text-cyan-600 font-semibold;
+}
+
+/* =========================
+   ANALYTICS INSIGHTS
+========================= */
+
+.insights-grid {
+  @apply grid grid-cols-1
+  xl:grid-cols-2
+  gap-8 mt-16;
+}
+
+.insight-card {
+  @apply glass-card
+  p-8 min-h-[320px];
+}
+
+.insight-header {
+  @apply flex items-start
+  justify-between;
+}
+
+.insight-title {
+  @apply text-2xl font-bold
+  text-slate-900;
+}
+
+.insight-subtitle {
+  @apply mt-2 text-gray-500;
+}
+
+
+/* CHART PLACEHOLDER */
+
+.chart-placeholder {
+  @apply mt-10 h-[200px]
+  rounded-3xl
+  bg-gradient-to-br
+  from-cyan-50 to-purple-50
+  border border-cyan-100
+  relative overflow-hidden;
+}
+
+.chart-line {
+  @apply absolute bottom-10 left-6 right-6
+  h-[3px]
+  bg-gradient-to-r
+  from-cyan-500 to-purple-600
+  rounded-full;
+}
+
+.chart-glow {
+  @apply absolute
+  w-24 h-24
+  rounded-full
+  bg-cyan-400/20
+  blur-3xl;
+}
+
+
+/* INSIGHT STATS */
+
+.insight-stats {
+  @apply mt-8 flex items-center
+  justify-between;
+}
+
+.insight-stat-label {
+  @apply text-gray-500 text-sm;
+}
+
+.insight-stat-value {
+  @apply mt-2 text-2xl
+  font-bold text-slate-900;
+}
+
+/* =========================
+   HERO SECTION
+========================= */
+
+.dashboard-hero {
+  @apply flex flex-col
+  xl:flex-row items-start
+  justify-between gap-10;
+}
+
+.dashboard-hero-left {
+  @apply max-w-3xl;
+}
+
+
+/* ROLE BADGE */
+
+.dashboard-role-badge {
+  @apply inline-flex items-center
+  px-4 py-2 rounded-full
+  bg-cyan-100 text-cyan-700
+  text-sm font-semibold;
+}
+
+
+/* HEADING */
+
+.dashboard-heading {
+  @apply mt-6 text-5xl
+  md:text-6xl font-black
+  text-slate-900
+  leading-tight;
+}
+
+.dashboard-highlight {
+  @apply bg-gradient-to-r
+  from-cyan-500 to-purple-600
+  bg-clip-text text-transparent;
+}
+
+
+/* SUBTITLE */
+
+.dashboard-subheading {
+  @apply mt-6 text-lg
+  text-gray-600
+  leading-relaxed max-w-2xl;
+}
+
+
+/* SUMMARY CARD */
+
+.dashboard-hero-summary {
+  @apply p-8 w-full
+  xl:w-[360px];
+}
+
+.hero-summary-label {
+  @apply text-gray-500
+  font-medium;
+}
+
+.hero-summary-value {
+  @apply mt-4 text-3xl
+  font-black text-slate-900;
+}
+
+.hero-summary-text {
+  @apply mt-4 text-gray-600
+  leading-relaxed;
+}
+
+/* =========================
+   EVENT WORKSPACE
+========================= */
+
+.workspace-section {
+  @apply mt-20;
+}
+
+.workspace-header {
+  @apply flex items-center
+  justify-between;
+}
+
+.workspace-title {
+  @apply text-3xl font-bold
+  text-slate-900;
+}
+
+.workspace-grid {
+  @apply grid grid-cols-1
+  xl:grid-cols-2
+  gap-8 mt-10;
+}
+
+
+/* EVENT CARD */
+
+.workspace-event-card {
+  @apply p-8;
+}
+
+.workspace-event-top {
+  @apply flex items-start
+  justify-between gap-6;
+}
+
+.workspace-event-title {
+  @apply text-2xl font-bold
+  text-slate-900;
+}
+
+.workspace-event-venue {
+  @apply mt-2 text-gray-500;
+}
+
+.workspace-event-status {
+  @apply px-4 py-2 rounded-full
+  bg-cyan-100 text-cyan-700
+  text-sm font-semibold;
+}
+
+.workspace-event-description {
+  @apply mt-6 text-gray-600
+  leading-relaxed;
+}
+
+
+/* STATS */
+
+.workspace-event-stats {
+  @apply mt-8 flex items-center
+  gap-10;
+}
+
+.workspace-stat-label {
+  @apply text-sm text-gray-500;
+}
+
+.workspace-stat-value {
+  @apply mt-2 text-2xl
+  font-bold text-slate-900;
+}
+
+
+/* FOOTER */
+
+.workspace-event-footer {
+  @apply mt-8 flex items-center
+  justify-between;
+}
+
+.workspace-event-date {
+  @apply text-gray-500
+  font-medium;
+}
+
+/* =========================
+   ACTIVITY FEED
+========================= */
+
+.activity-section {
+  @apply mt-20;
+}
+
+.activity-grid {
+  @apply mt-10 flex flex-col
+  gap-5;
+}
+
+.activity-card {
+  @apply p-5 flex items-center
+  gap-5;
+}
+
+.activity-indicator {
+  @apply w-4 h-4 rounded-full
+  bg-gradient-to-r
+  from-cyan-500 to-purple-600
+  flex-shrink-0;
+}
+
+.activity-title {
+  @apply text-slate-900
+  font-semibold;
+}
+
+.activity-time {
+  @apply mt-1 text-sm
+  text-gray-500;
+}
+
+/* =========================
+   ANALYTICS CHART
+========================= */
+
+.analytics-chart-section {
+  @apply mt-20;
+}
+
+.analytics-chart-card {
+  @apply p-8;
+}
+
+.analytics-chart-header {
+  @apply flex items-center
+  justify-between;
+}
+
+.analytics-chart-title {
+  @apply text-3xl font-bold
+  text-slate-900;
+}
+
+.analytics-chart-subtitle {
+  @apply mt-2 text-gray-500;
+}
+
+.analytics-chart-wrapper {
+  @apply mt-10;
+}
+
+/* =========================
+   DASHBOARD PAGES
+========================= */
+
+.dashboard-page-title {
+  @apply text-5xl font-black
+  text-slate-900;
+}
+
+/* =========================
+   EVENTS PAGE
+========================= */
+
+.events-page-header {
+  @apply flex flex-col
+  lg:flex-row items-start
+  lg:items-center
+  justify-between gap-8;
+}
+
+.events-page-description {
+  @apply mt-4 text-lg
+  text-gray-600
+  max-w-2xl leading-relaxed;
+}
+
+
+/* LOADING */
+
+.events-loading {
+  @apply mt-14 text-lg
+  text-gray-500;
+}
+
+
+/* EMPTY STATE */
+
+.empty-events-state {
+  @apply mt-14 p-12
+  text-center;
+}
+
+.empty-events-title {
+  @apply text-3xl font-bold
+  text-slate-900;
+}
+
+.empty-events-description {
+  @apply mt-4 text-gray-600;
+}
+
+/* =========================
+   CREATE EVENT MODAL
+========================= */
+
+.modal-overlay {
+  @apply fixed inset-0
+  bg-black/40
+  backdrop-blur-sm
+  flex items-center
+  justify-center
+  z-[100];
+}
+
+.create-event-modal {
+  @apply w-full max-w-2xl
+  p-8;
+}
+
+.create-event-header {
+  @apply flex items-center
+  justify-between;
+}
+
+.create-event-title {
+  @apply text-3xl font-bold
+  text-slate-900;
+}
+
+.create-event-close {
+  @apply text-2xl text-gray-500
+  hover:text-black transition;
+}
+
+
+/* FORM */
+
+.create-event-form {
+  @apply mt-8 flex flex-col
+  gap-5;
+}
+
+/* =========================
+   EVENT MANAGEMENT MODAL
+========================= */
+
+.event-manage-modal {
+  @apply w-full max-w-2xl
+  p-8 rounded-[32px]
+  max-h-[90vh]
+  overflow-y-auto;
+}
+
+.event-manage-modal {
+  animation: modalPop 0.25s ease;
+}
+
+@keyframes modalPop {
+
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* HEADER */
+
+.event-manage-header {
+  @apply flex items-start
+  justify-between gap-6;
+}
+
+.event-status-badge {
+  @apply inline-flex items-center
+  px-4 py-2 rounded-full
+  bg-cyan-100 text-cyan-700
+  text-sm font-semibold;
+}
+
+.event-manage-title {
+  @apply mt-5 text-4xl
+  font-black text-slate-900;
+}
+
+.event-manage-meta {
+  @apply mt-3 text-gray-500;
+}
+
+.event-close-btn {
+  @apply text-3xl text-gray-400
+  hover:text-black transition;
+}
+
+
+/* SECTION */
+
+.event-manage-section {
+  @apply mt-10;
+}
+
+.event-section-title {
+  @apply text-xl font-bold
+  text-slate-900;
+}
+
+.event-description-text {
+  @apply mt-4 text-gray-600
+  leading-relaxed;
+}
+
+
+/* STATS */
+
+.event-stats-row {
+  @apply grid grid-cols-2
+  gap-6 mt-10;
+}
+
+.event-mini-stat {
+  @apply p-6;
+}
+
+.mini-stat-label {
+  @apply text-gray-500;
+}
+
+.mini-stat-value {
+  @apply mt-3 text-3xl
+  font-black text-slate-900;
+}
+
+
+/* PARTICIPANTS */
+
+.participants-header {
+  @apply flex items-center
+  justify-between;
+}
+
+.participants-count {
+  @apply text-sm text-gray-500;
+}
+
+.participants-preview {
+  @apply mt-5 flex flex-col
+  gap-4;
+}
+
+.participant-row {
+  @apply flex items-center
+  justify-between
+  p-4 rounded-2xl
+  bg-slate-50;
+}
+
+.participant-name {
+  @apply font-semibold
+  text-slate-900;
+}
+
+.participant-email {
+  @apply mt-1 text-sm
+  text-gray-500;
+}
+
+.participant-roll {
+  @apply text-sm font-medium
+  text-gray-600;
+}
+
+.participants-empty {
+  @apply text-gray-500;
+}
+
+
+/* ACTIONS */
+
+.event-actions-panel {
+  @apply mt-12 flex items-center
+  justify-end gap-4;
+}
+
+/* ACTIONS */
+
+.event-details-actions {
+  @apply mt-12 flex items-center
+  justify-end gap-4;
+}
+
+
+/* =========================
+   DELETE MODAL
+========================= */
+
+.delete-modal {
+  @apply w-full max-w-md
+  p-8 text-center;
+}
+
+.delete-modal-title {
+  @apply text-3xl font-black
+  text-slate-900;
+}
+
+.delete-modal-text {
+  @apply mt-5 text-gray-600
+  leading-relaxed;
+}
+
+.delete-modal-actions {
+  @apply mt-10 flex items-center
+  justify-center gap-4;
+}
+
+
+/* DANGER BUTTON */
+
+.danger-btn {
+  @apply px-8 py-4 rounded-full
+  bg-red-500 text-white
+  font-semibold
+  hover:bg-red-600
+  transition duration-300;
+}
