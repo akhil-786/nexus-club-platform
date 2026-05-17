@@ -1,21 +1,31 @@
 import { useState,  } from "react";
   
 import EventDetailsModal from "./EventDetailsModal";
+import { useNavigate } from "react-router-dom";
 
-const EventWorkspaceCard = ({event,onManage}) => {
+const EventWorkspaceCard = ({event,onManage,redirectMode = false}) => {
   
-    const formattedDate =
-      new Date(
-        event.eventDate
-      ).toLocaleDateString(
-        "en-IN",
-        {
+    const formattedDate = new Date(event.eventDate).toLocaleDateString("en-IN",{
           day: "numeric",
           month: "short",
           year: "numeric",
         }
       );
-  
+
+      const today = new Date();
+
+      const eventDate =
+        new Date(event.eventDate);
+            
+      const isCompleted =
+        eventDate < today;
+            
+      const eventStatus =
+        isCompleted
+          ? "completed"
+          : "upcoming";
+        
+    const navigate = useNavigate();
   
     return (
       <div className="glass-card workspace-event-card">
@@ -37,8 +47,8 @@ const EventWorkspaceCard = ({event,onManage}) => {
           </div>
   
   
-          <div className="workspace-event-status">
-            {event.status}
+          <div className={isCompleted ? "workspace-event-status completed-status": "workspace-event-status upcoming-status"}>
+            {eventStatus}
           </div>
   
         </div>
@@ -98,12 +108,14 @@ const EventWorkspaceCard = ({event,onManage}) => {
           </div>
   
   
-          <button className="secondary-btn" onClick={() => onManage(event) }>
+          <button className="secondary-btn" onClick={() => {
+
+            if (redirectMode) { navigate("/club-dashboard/events"); 
+            } else {  onManage(event);
+              }
+            }}>
             Manage
           </button>
-
-         
-  
         </div>
      </div>
     );

@@ -1,6 +1,25 @@
-import { NavLink } from "react-router-dom";
+import {
+  NavLink,
+} from "react-router-dom";
+
+import {
+  useState,
+} from "react";
+
+import {
+  Menu,
+  X,
+} from "lucide-react";
+
 
 const DashboardNavbar = () => {
+
+  const [mobileMenu, setMobileMenu] = useState(false);
+
+  const user = JSON.parse(
+    localStorage.getItem("user")
+  );
+
 
   return (
     <nav className="dashboard-navbar">
@@ -14,80 +33,250 @@ const DashboardNavbar = () => {
         </h1>
 
 
-        {/* NAVIGATION */}
+        {/* DESKTOP NAV */}
 
+        
         <div className="dashboard-nav-links">
 
-          <NavLink
-            to="/club-dashboard"
-            end
-            className={({ isActive }) =>
-              isActive
-                ? "dashboard-nav-item dashboard-nav-active"
-                : "dashboard-nav-item"
+  {user?.role ===
+    "club_admin" && (
+    <>
+      <NavLink
+        to="/club-dashboard"
+        end
+        className={({ isActive }) =>
+          isActive
+            ? "dashboard-nav-item dashboard-nav-active"
+            : "dashboard-nav-item"
+        }
+      >
+        Dashboard
+      </NavLink>
+
+
+      <NavLink
+        to="/club-dashboard/events"
+        className={({ isActive }) =>
+          isActive
+            ? "dashboard-nav-item dashboard-nav-active"
+            : "dashboard-nav-item"
+        }
+      >
+        Events
+      </NavLink>
+
+
+      <NavLink
+        to="/club-dashboard/members"
+        className={({ isActive }) =>
+          isActive
+            ? "dashboard-nav-item dashboard-nav-active"
+            : "dashboard-nav-item"
+        }
+      >
+        Members
+      </NavLink>
+
+
+      <NavLink
+        to="/club-dashboard/requests"
+        className={({ isActive }) =>
+          isActive
+            ? "dashboard-nav-item dashboard-nav-active"
+            : "dashboard-nav-item"
+        }
+      >
+        Requests
+      </NavLink>
+    </>
+  )}
+
+
+  {user?.role ===
+    "student" && (
+    <>
+      <NavLink
+        to="/student-dashboard"
+        end
+        className={({ isActive }) =>
+          isActive
+            ? "dashboard-nav-item dashboard-nav-active"
+            : "dashboard-nav-item"
+        }
+      >
+        Dashboard
+      </NavLink>
+
+
+      <NavLink
+        to="/student-dashboard/events"
+        className={({ isActive }) =>
+          isActive
+            ? "dashboard-nav-item dashboard-nav-active"
+            : "dashboard-nav-item"
+        }
+      >
+        Events
+      </NavLink>
+
+
+      <NavLink
+        to="/student-dashboard/my-events"
+        className={({ isActive }) =>
+          isActive
+            ? "dashboard-nav-item dashboard-nav-active"
+            : "dashboard-nav-item"
+        }
+      >
+        My Events
+      </NavLink>
+
+
+      <NavLink
+        to="/student-dashboard/profile"
+        className={({ isActive }) =>
+          isActive
+            ? "dashboard-nav-item dashboard-nav-active"
+            : "dashboard-nav-item"
+        }
+      >
+        Profile
+      </NavLink>
+    </>
+  )}
+
+</div>
+
+
+        {/* RIGHT */}
+
+        <div className="dashboard-navbar-right">
+
+          <div className="dashboard-profile-avatar">
+            P
+          </div>
+
+
+          {/* MOBILE BUTTON */}
+
+          <button
+            className="mobile-menu-btn"
+            onClick={() =>
+              setMobileMenu(
+                !mobileMenu
+              )
             }
           >
-            Dashboard
+
+            {mobileMenu
+              ? <X size={28} />
+              : <Menu size={28} />}
+
+          </button>
+
+        </div>
+
+      </div>
+
+
+      {/* MOBILE MENU */}
+
+      {mobileMenu && (
+
+        <div className="mobile-dashboard-menu">
+
+        {user?.role === "club_admin" && (
+          <>
+            <NavLink
+              to="/club-dashboard"
+              className="mobile-dashboard-link"
+              onClick={() =>
+                setMobileMenu(false)
+              }
+            >
+              Dashboard
+            </NavLink>
+            
+            <NavLink
+              to="/club-dashboard/events"
+              className="mobile-dashboard-link"
+              onClick={() =>
+                setMobileMenu(false)
+              }
+            >
+              Events
+            </NavLink>
+            
+            <NavLink
+              to="/club-dashboard/members"
+              className="mobile-dashboard-link"
+              onClick={() =>
+                setMobileMenu(false)
+              }
+            >
+              Members
+            </NavLink>
+            
+            <NavLink
+              to="/club-dashboard/requests"
+              className="mobile-dashboard-link"
+              onClick={() =>
+                setMobileMenu(false)
+              }
+            >
+              Requests
+            </NavLink>
+          </>
+        )}
+
+        {user?.role ===
+          "student" && (
+          <>
+            <NavLink
+              to="/student-dashboard"
+              className="mobile-dashboard-link"
+              onClick={() =>
+                setMobileMenu(false)
+              }
+            >
+              Dashboard
           </NavLink>
-
-
+          
           <NavLink
-            to="/club-dashboard/events"
-            className={({ isActive }) =>
-              isActive
-                ? "dashboard-nav-item dashboard-nav-active"
-                : "dashboard-nav-item"
+            to="/student-dashboard/events"
+            className="mobile-dashboard-link"
+            onClick={() =>
+              setMobileMenu(false)
             }
           >
             Events
           </NavLink>
-
-
+          
           <NavLink
-            to="/club-dashboard/members"
-            className={({ isActive }) =>
-              isActive
-                ? "dashboard-nav-item dashboard-nav-active"
-                : "dashboard-nav-item"
+            to="/student-dashboard/my-events"
+            className="mobile-dashboard-link"
+            onClick={() =>
+              setMobileMenu(false)
             }
           >
-            Members
+            My Events
           </NavLink>
-
-
+          
           <NavLink
-            to="/club-dashboard/attendance"
-            className={({ isActive }) =>
-              isActive
-                ? "dashboard-nav-item dashboard-nav-active"
-                : "dashboard-nav-item"
+            to="/student-dashboard/profile"
+            className="mobile-dashboard-link"
+            onClick={() =>
+              setMobileMenu(false)
             }
           >
-            Attendance
+            Profile
           </NavLink>
-
-
-          <NavLink
-            to="/club-dashboard/requests"
-            className={({ isActive }) =>
-              isActive
-                ? "dashboard-nav-item dashboard-nav-active"
-                : "dashboard-nav-item"
-            }
-          >
-            Requests
-          </NavLink>
-
-        </div>
-
-
-        {/* PROFILE */}
-
-        <div className="dashboard-profile-avatar">
-          P
-        </div>
+        </>
+      )}
 
       </div>
+
+      )}
 
     </nav>
   );

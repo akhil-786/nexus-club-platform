@@ -26,14 +26,9 @@ import CreateEventModal from "./CreateEventModal";
   
           try {
   
-            const data =
-              await getSingleEvent(
-                eventId
-              );
+            const data = await getSingleEvent(eventId);
   
-            setEvent(
-              data.event
-            );
+            setEvent(data.event);
   
           } catch (error) {
   
@@ -49,8 +44,7 @@ import CreateEventModal from "./CreateEventModal";
   
     }, [eventId]);
 
-    const handleDelete =
-    async () => {
+    const handleDelete =  async () => {
   
       try {
   
@@ -85,6 +79,18 @@ import CreateEventModal from "./CreateEventModal";
       );
     }
   
+
+    const today = new Date();
+
+const eventDate =
+  new Date(event.eventDate);
+
+const isCompleted = eventDate < today;
+
+const eventStatus =
+  isCompleted
+    ? "completed"
+    : "upcoming";
   
     return (
       <div className="modal-overlay">
@@ -97,8 +103,8 @@ import CreateEventModal from "./CreateEventModal";
   
             <div>
   
-              <div className="event-status-badge">
-                {event.status}
+              <div className={isCompleted? "event-status-badge completed-status" : "event-status-badge upcoming-status"}>
+                {eventStatus}
               </div>
   
   

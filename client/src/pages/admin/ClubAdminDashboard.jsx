@@ -2,10 +2,11 @@ import DashboardLayout from "../../layouts/DashboardLayout";
 import AnalyticsCard from "../../components/AnalyticsCard";
 import InsightCard from "../../components/InsightCard";
 import { useEffect, useState } from "react";
-import { getClubEvents } from "../../services/eventService";
+import { getClubEvents,getDashboardAnalytics } from "../../services/eventService";
 import EventWorkspaceCard from "../../components/EventWorkspaceCard";
 import ActivityFeedCard from "../../components/ActivityFeedCard";
 import AnalyticsChart from "../../components/AnalyticsChart";
+import { useNavigate } from "react-router-dom";
 
 const ClubAdminDashboard = () => {
 
@@ -48,6 +49,32 @@ const ClubAdminDashboard = () => {
     fetchEvents();
   }, []);
 
+
+
+  const [analytics,setAnalytics] = useState(null);
+
+  useEffect(() => {
+
+    const fetchAnalytics = async () => {
+  
+        try {
+  
+          const data =
+            await getDashboardAnalytics();
+  
+          setAnalytics(data);
+  
+        } catch (error) {
+  
+          console.error(error);
+        }
+      };
+  
+    fetchAnalytics();
+  
+  }, []);
+
+  const navigate = useNavigate();
 
   return (
     <DashboardLayout>
@@ -111,7 +138,7 @@ const ClubAdminDashboard = () => {
           </p>
 
 
-          <button className="primary-btn mt-6">
+          <button className="primary-btn" onClick={() => navigate("/club-dashboard/events" )}>
             Create Event
           </button>
 
@@ -126,7 +153,7 @@ const ClubAdminDashboard = () => {
 
         <AnalyticsCard
           label="Total Members"
-          value="120"
+          value={analytics?.totalEvent || 0}
           growth="+12% this month"
         />
 
@@ -192,9 +219,7 @@ const ClubAdminDashboard = () => {
 
           <div className="workspace-grid">
 
-          {events
-          .sort(
-            (a, b) =>
+          {events.sort((a, b) =>
               new Date(a.eventDate) -
               new Date(b.eventDate)
           )
@@ -204,6 +229,7 @@ const ClubAdminDashboard = () => {
               <EventWorkspaceCard
                 key={event._id}
                 event={event}
+                redirectMode={true}
               />
         
             ))}

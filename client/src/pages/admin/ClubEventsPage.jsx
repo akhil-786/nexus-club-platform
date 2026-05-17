@@ -27,14 +27,35 @@ import {useEffect,useState,} from "react";
     
         try {
     
-          const data =
-            await getClubEvents(
-              user.clubId
-            );
+          const data = await getClubEvents(user.clubId);
     
-          setEvents(
-            data.events
-          );
+          const sortedEvents =
+          data.events.sort((a, b) => {
+          
+            const today =
+              new Date();
+          
+            const aCompleted =
+              new Date(a.eventDate)
+              < today;
+          
+            const bCompleted =
+              new Date(b.eventDate)
+              < today;
+          
+            if (
+              aCompleted !== bCompleted
+            ) {
+              return aCompleted ? 1 : -1;
+            }
+          
+            return (
+              new Date(a.eventDate)
+              - new Date(b.eventDate)
+            );
+        });
+        
+        setEvents(sortedEvents);
     
         } catch (error) {
     
@@ -112,20 +133,59 @@ import {useEffect,useState,} from "react";
         ) : (
   
           <section className="workspace-grid">
-  
-            {events.map((event) => (
-  
-              <EventWorkspaceCard
-              key={event._id}
-              event={event}
-              onManage={
-                setSelectedEvent
-              }
-            />
-  
-            ))}
-  
-          </section>
+
+  {events.length === 0 ? (
+
+    <div className="empty-events-state glass-card">
+
+      <div className="empty-events-icon">
+        ✦
+      </div>
+
+
+      <h2 className="empty-events-title">
+        No events created yet
+      </h2>
+
+
+      <p className="empty-events-text">
+
+        Create your first club
+        event and start managing
+        student participation
+        and attendance.
+
+      </p>
+
+
+      <button
+        className="primary-btn mt-8"
+        onClick={() =>
+          setShowCreateModal(true)
+        }
+      >
+        Create First Event
+      </button>
+
+    </div>
+
+  ) : (
+
+    events.map((event) => (
+
+      <EventWorkspaceCard
+        key={event._id}
+        event={event}
+        onManage={
+          setSelectedEvent
+        }
+      />
+
+    ))
+
+  )}
+
+</section>
   
         )}
         {showModal && (

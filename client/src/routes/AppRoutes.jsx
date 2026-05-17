@@ -3,7 +3,7 @@ import { BrowserRouter, Router, Route, Routes} from "react-router-dom";
 import LandingPage from "../pages/LandingPage";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
-import StudentDashboard from "../pages/StudentDashboard";
+import StudentDashboard from "../pages/student/StudentDashboard";
 import ClubAdminDashboard from "../pages/admin/ClubAdminDashboard"
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -11,6 +11,9 @@ import ClubEventsPage from "../pages/admin/ClubEventsPage";
 import ClubMembersPage from "../pages/admin/ClubMembersPage";
 import ClubAttendancePage from "../pages/admin/ClubAttendancePage";
 import ClubRequestsPage from "../pages/admin/ClubRequestsPage";
+import StudentEventsPage from "../pages/student/StudentEventsPage";
+import MyEventsPage from "../pages/student/MyEventsPage";
+import StudentProfilePage from "../pages/student/StudentProfilePage";
 
 const AppRoutes = () => {
     return (
@@ -23,6 +26,25 @@ const AppRoutes = () => {
                 <Route path="/student-dashboard" 
                     element={<ProtectedRoute allowedRoles={["student"]}>
                     <StudentDashboard/>
+                    </ProtectedRoute>
+                    }
+                />
+
+                <Route path="/student-dashboard/events" 
+                    element={<ProtectedRoute allowedRoles={["student"]}>
+                    <StudentEventsPage/>
+                    </ProtectedRoute>
+                    }
+                />
+                <Route path="/student-dashboard/my-events" 
+                    element={<ProtectedRoute allowedRoles={["student"]}>
+                    <MyEventsPage/>
+                    </ProtectedRoute>
+                    }
+                />
+                <Route path="/student-dashboard/profile" 
+                    element={<ProtectedRoute allowedRoles={["student"]}>
+                    <StudentProfilePage/>
                     </ProtectedRoute>
                     }
                 />
@@ -81,6 +103,7 @@ const AppRoutes = () => {
                     </ProtectedRoute>
                   }
                 />
+
             </Routes>
          </BrowserRouter>
     );

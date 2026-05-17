@@ -1,11 +1,6 @@
-import {
-    useState,
-  } from "react";
+import {useState,} from "react";
   
-  import {
-    createEvent,
-    updateEvent,
-  } from "../services/eventService";
+  import {createEvent, updateEvent,} from "../services/eventService";
   
   
   const CreateEventModal = ({
@@ -20,8 +15,7 @@ import {
     );
   
   
-    const [formData, setFormData] =
-      useState({
+    const [formData, setFormData] = useState({
   
         title:
           existingEvent?.title || "",
@@ -38,8 +32,7 @@ import {
       });
   
   
-    const [loading, setLoading] =
-      useState(false);
+    const [loading, setLoading] = useState(false);
   
   
     const handleChange = (e) => {
@@ -52,10 +45,9 @@ import {
     };
   
   
-    const handleSubmit =
-      async (e) => {
+    const handleSubmit = async (e) => {
   
-        e.preventDefault();
+      e.preventDefault();
   
         try {
   
@@ -80,7 +72,6 @@ import {
               payload
             );
           }
-  
   
           onEventCreated();
   
@@ -193,6 +184,6 @@ import {
   
       </div>
     );
-  };
+};
   
-  export default CreateEventModal;
+export default CreateEventModal;
