@@ -145,6 +145,47 @@ const DashboardNavbar = () => {
     </>
   )}
 
+    {user?.role ===
+  "college_admin" && (
+  <>
+    <NavLink
+      to="/college-dashboard"
+      end
+      className={({ isActive }) =>
+        isActive
+          ? "dashboard-nav-item dashboard-nav-active"
+          : "dashboard-nav-item"
+      }
+    >
+      Dashboard
+    </NavLink>
+
+
+    <NavLink
+      to="/college-dashboard/clubs"
+      className={({ isActive }) =>
+        isActive
+          ? "dashboard-nav-item dashboard-nav-active"
+          : "dashboard-nav-item"
+      }
+    >
+      Clubs
+    </NavLink>
+
+
+    <NavLink
+      to="/college-dashboard/club-admins"
+      className={({ isActive }) =>
+        isActive
+          ? "dashboard-nav-item dashboard-nav-active"
+          : "dashboard-nav-item"
+      }
+    >
+      Club Admins
+    </NavLink>
+  </>
+)}    
+
 </div>
 
 
@@ -268,11 +309,43 @@ const DashboardNavbar = () => {
             onClick={() =>
               setMobileMenu(false)
             }
+
+
           >
             Profile
           </NavLink>
         </>
       )}
+
+      {user?.role ===
+  "college_admin" && (
+  <>
+
+    <NavLink
+      to="/college-dashboard"
+      className="mobile-dashboard-link"
+    >
+      Dashboard
+    </NavLink>
+
+
+    <NavLink
+      to="/college-dashboard/clubs"
+      className="mobile-dashboard-link"
+    >
+      Clubs
+    </NavLink>
+
+
+    <NavLink
+      to="/college-dashboard/club-admins"
+      className="mobile-dashboard-link"
+    >
+      Club Admins
+    </NavLink>
+
+  </>
+)}
 
       </div>
 

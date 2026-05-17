@@ -51,6 +51,11 @@ const eventSchema = new mongoose.Schema(
       },
     ],
 
+    collegeId: {
+    type: String,
+    required: true,
+},
+
     banner: {
       type: String,
       default: "",
@@ -65,6 +70,7 @@ const eventSchema = new mongoose.Schema(
       ],
       default: "upcoming",
     },
+
   },
   {
     timestamps: true,

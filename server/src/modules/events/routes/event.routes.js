@@ -31,6 +31,13 @@ router.post(
   createEvent
 );
 
+router.get(
+  "/club/:clubId",
+  protect,
+  // checkClubAccess,
+  getClubEvents
+);
+
 router.put("/update/:eventId",
     protect,
     authorizeRoles("club_admin"),
@@ -61,12 +68,7 @@ router.get(
   getAllEvents
 );
 
-router.get(
-  "/club/:clubId",
-  protect,
-  checkClubAccess,
-  getClubEvents
-);
+
 
 router.get(
   "/:eventId",

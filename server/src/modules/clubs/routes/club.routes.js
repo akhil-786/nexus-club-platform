@@ -4,6 +4,10 @@ const {
   createClub,
   assignClubAdmin,
   getSingleClub,
+  getAllClubs,
+  removeClubAdmin,
+  deleteClub,
+  createClubAdmin,
 } = require("../controllers/club.controller");
 
 const {
@@ -33,11 +37,41 @@ router.put(
     assignClubAdmin
 )
 
+router.get( "/",
+  protect,
+  authorizeRoles(
+    "college_admin"
+  ),
+  getAllClubs
+);
+
 router.get("/:clubId",
     protect,
     checkClubAccess,
     getSingleClub
 );
 
+router.post(
+  "/create-admin",
+  protect,
+  authorizeRoles("college_admin"),
+  createClubAdmin
+);
 
+router.put(
+  "/remove-admin",
+  protect,
+  authorizeRoles("college_admin"),
+  removeClubAdmin
+);
+
+
+router.delete(
+  "/delete/:clubId",
+  protect,
+  authorizeRoles("college_admin"),
+  deleteClub
+);
+
+  
 module.exports = router;

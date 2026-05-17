@@ -14,6 +14,9 @@ import ClubRequestsPage from "../pages/admin/ClubRequestsPage";
 import StudentEventsPage from "../pages/student/StudentEventsPage";
 import MyEventsPage from "../pages/student/MyEventsPage";
 import StudentProfilePage from "../pages/student/StudentProfilePage";
+import CollegeDashboard from "../pages/collegeAdmin/CollegeDashboard";
+import ClubsPage from "../pages/collegeAdmin/ClubsPage";
+import ManageClubPage from "../pages/collegeAdmin/ManageClubPage";
 
 const AppRoutes = () => {
     return (
@@ -100,6 +103,41 @@ const AppRoutes = () => {
                       ]}
                     >
                       <ClubRequestsPage />
+                    </ProtectedRoute>
+                  }
+                />
+                 <Route path="/college-dashboard"
+                  element={
+                    <ProtectedRoute
+                      allowedRoles={[
+                        "college_admin"
+                      ]}
+                    >
+                      <CollegeDashboard />
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route path="/college-dashboard/clubs"
+                  element={
+                    <ProtectedRoute
+                      allowedRoles={[
+                        "college_admin"
+                      ]}
+                    >
+                      <ClubsPage />
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route path="/college-dashboard/clubs/:clubId"
+                  element={
+                    <ProtectedRoute
+                      allowedRoles={[
+                        "college_admin"
+                      ]}
+                    >
+                      <ManageClubPage />
                     </ProtectedRoute>
                   }
                 />

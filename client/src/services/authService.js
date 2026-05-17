@@ -44,3 +44,24 @@ export const updateProfile = async (payload) => {
     return response.data;
 };
 
+export const getCollegeAnalytics = async () => {
+
+    const token =
+      localStorage.getItem(
+        "token"
+    );
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+    const response = await axios.get(
+        `${API}/auth/analytics`,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+    return response.data;
+};

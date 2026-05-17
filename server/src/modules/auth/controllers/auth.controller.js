@@ -6,6 +6,8 @@ const User = require("../models/user.model");
 
 const Club = require("../../clubs/models/club.model");
 
+const Event =  require( "../../events/models/event.model");
+
 const registerUser = async (req, res) => {
   try {
     const {
@@ -461,6 +463,69 @@ const updateProfile =
     }
 };
 
+const getCollegeAnalytics = async (req, res) => {
+
+    try {
+
+      const totalStudents =
+        await User.countDocuments({
+
+          role: "student",
+
+          collegeId:
+            req.user.collegeId,
+        });
+
+        const today = new Date();
+
+          today.setHours(0, 0, 0, 0);
+
+        const totalActiveEvents = await Event.countDocuments({ eventDate: { $gte: today },
+         collegeId:
+         req.user.collegeId,
+        });
+
+
+      const totalClubAdmins =
+        await User.countDocuments({
+
+          role: "club_admin",
+
+          collegeId:
+            req.user.collegeId,
+        });
+
+
+      return res.status(200).json({
+
+        success: true,
+
+        analytics: {
+
+          totalStudents,
+
+          totalClubAdmins,
+
+          totalActiveEvents,
+
+        },
+      });
+
+    } catch (error) {
+
+      console.error(error);
+
+      return res.status(500).json({
+
+        success: false,
+
+        message:
+          "Failed to fetch analytics",
+
+      });
+    }
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -470,4 +535,5 @@ module.exports = {
   getApprovedUsers,
   getMyProfile,
   updateProfile,
+  getCollegeAnalytics,
 };

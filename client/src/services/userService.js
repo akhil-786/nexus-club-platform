@@ -11,8 +11,7 @@ const getToken = () => {
 };
 
 
-export const getPendingRequests =
-  async () => {
+export const getPendingRequests =  async () => {
 
     const response =  await axios.get(`${API}/pending-users`,
         {
@@ -27,8 +26,7 @@ export const getPendingRequests =
 };
 
 
-export const approveUser =
-  async (userId) => {
+export const approveUser =  async (userId) => {
 
     const response =
       await axios.put(
@@ -46,8 +44,7 @@ export const approveUser =
 };
 
 
-export const rejectUser =
-  async (userId) => {
+export const rejectUser =  async (userId) => {
 
     const response =
       await axios.patch(
@@ -64,8 +61,7 @@ export const rejectUser =
     return response.data;
 };
 
-export const getApprovedMembers =
-  async () => {
+export const getApprovedMembers =  async () => {
 
     const response =
       await axios.get(

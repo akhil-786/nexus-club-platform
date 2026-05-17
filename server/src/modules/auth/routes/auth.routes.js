@@ -14,6 +14,7 @@ const {
     getApprovedUsers,
     getMyProfile,
     updateProfile,
+    getCollegeAnalytics,
 } = require("../controllers/auth.controller");
 
 const router = express.Router();
@@ -54,6 +55,12 @@ router.get("/me",
 router.put("/update-profile",
 protect,
 updateProfile
+);
+
+router.get("/analytics",
+  protect,
+  authorizeRoles("college_admin"),
+  getCollegeAnalytics
 );
 
 module.exports = router;

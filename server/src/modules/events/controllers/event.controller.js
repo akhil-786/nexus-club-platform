@@ -3,7 +3,9 @@ const Event = require("../models/event.model");
 const Club = require("../../clubs/models/club.model");
 
 const createEvent = async (req, res) => {
+
   try {
+
     const {
       title,
       description,
@@ -14,6 +16,7 @@ const createEvent = async (req, res) => {
 
 
     // Validation
+
     if (
       !title ||
       !description ||
@@ -21,67 +24,106 @@ const createEvent = async (req, res) => {
       !eventDate ||
       !clubId
     ) {
+
       return res.status(400).json({
+
         success: false,
+
         message:
           "All fields are required",
+
       });
     }
 
 
     // Find Club
-    const club = await Club.findById(
-      clubId
-    );
+
+    const club =
+      await Club.findById(
+        clubId
+      );
+
 
     if (!club) {
+
       return res.status(404).json({
+
         success: false,
-        message: "Club not found",
+
+        message:
+          "Club not found",
+
       });
     }
 
 
     // Ownership Validation
-    const isAdmin = club.clubAdmins.some(
-      (adminId) =>
-        adminId.toString() ===
-        req.user.id
-    );
+
+    const isAdmin =
+      club.clubAdmins.some(
+
+        (adminId) =>
+
+          adminId.toString()
+          === req.user.id
+      );
+
 
     if (!isAdmin) {
+
       return res.status(403).json({
+
         success: false,
+
         message:
           "You can create events only for your own club",
+
       });
     }
 
 
     // Create Event
-    const event = await Event.create({
-      title,
-      description,
-      venue,
-      eventDate,
-      clubId,
-      createdBy: req.user.id,
-    });
+
+    const event =
+      await Event.create({
+
+        title,
+        description,
+        venue,
+        eventDate,
+
+        clubId,
+
+        collegeId:
+          req.user.collegeId,
+
+        createdBy:
+          req.user.id,
+      });
 
 
     return res.status(201).json({
+
       success: true,
+
       message:
         "Event created successfully",
+
       event,
+
     });
 
   } catch (error) {
+
     console.error(error);
 
     return res.status(500).json({
+
       success: false,
-      message: "Server Error",
+
+      message:
+        "Server Error",
+
     });
   }
 };

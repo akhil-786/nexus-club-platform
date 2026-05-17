@@ -4,7 +4,7 @@ import axios from "axios";
 const API = `${import.meta.env.VITE_API_URL}/events`;
 
 
-  export const getClubEvents = async () => {
+export const getClubEvents = async ( clubId ) => {
 
     const token = localStorage.getItem("token");
 
@@ -13,8 +13,7 @@ const API = `${import.meta.env.VITE_API_URL}/events`;
     );
 
     const response =
-      await axios.get(
-        `${API}/club/${user.clubId}`,
+      await axios.get(`${API}/club/${clubId}`,
         {
           headers: {
             Authorization:
@@ -27,9 +26,7 @@ const API = `${import.meta.env.VITE_API_URL}/events`;
 };
 export const createEvent = async (eventData) => {
 
-    const token =  localStorage.getItem(
-        "token"
-      );
+    const token =  localStorage.getItem( "token" );
 
     const response =
       await axios.post(
