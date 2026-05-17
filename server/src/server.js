@@ -9,15 +9,18 @@ const PORT = process.env.PORT || 5000;
 // Connect Database
 connectDB();
 
-
 app.use(
   cors({
-    origin:
-      "https://your-vercel-url.vercel.app",
+    origin: [
+      "http://localhost:5173",
+      "https://nexus-club-platform.vercel.app",
+    ],
 
     credentials: true,
   })
 );
+
+
 // Start Server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
