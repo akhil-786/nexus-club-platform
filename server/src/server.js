@@ -9,16 +9,6 @@ const PORT = process.env.PORT || 5000;
 // Connect Database
 connectDB();
 
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://nexus-club-platform.vercel.app",
-    ],
-
-    credentials: true,
-  })
-);
 
 
 // Start Server
