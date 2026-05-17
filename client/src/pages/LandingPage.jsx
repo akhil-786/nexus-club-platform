@@ -57,9 +57,12 @@ const LandingPage = () => {
 
         <a href="#clubs" className="primary-btn">Explore Clubs</a>
 
-          <button className="secondary-btn">
-            Learn More
-          </button>
+         <Link
+            to="/login"
+            className="secondary-btn"
+          >
+            Login
+          </Link>
 
         </motion.div>
 
