@@ -255,10 +255,7 @@ const deleteEvent = async (
   }
 };
 
-const registerForEvent = async (
-  req,
-  res
-) => {
+const registerForEvent = async (req, res) => {
   try {
 
     const { eventId } = req.params;

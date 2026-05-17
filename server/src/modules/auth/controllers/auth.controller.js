@@ -329,6 +329,137 @@ const rejectUser = async (req, res) => {
     }
 };
 
+const getApprovedUsers = async (req, res) => {
+    try {
+      const users = await User.find({
+
+          clubId: req.user.clubId,
+
+          status:
+            "approved",
+
+          role:
+            "student",
+        })
+        .select("-password");
+      res.status(200).json({
+        success: true,
+        users,
+      });
+
+    } catch (error) {
+
+      console.error(error);
+
+      res.status(500).json({
+        success: false,
+        message:
+          "Failed to fetch approved users",
+      });
+    }
+};
+
+const getMyProfile =
+  async (req, res) => {
+
+    try {
+
+      const user =
+        await User.findById(
+          req.user.id
+        ).select("-password");
+
+
+      if (!user) {
+
+        return res.status(404).json({
+          success: false,
+          message:
+            "User not found",
+        });
+      }
+
+
+      return res.status(200).json({
+        success: true,
+        user,
+      });
+
+    } catch (error) {
+
+      console.error(error);
+
+      return res.status(500).json({
+        success: false,
+        message:
+          "Failed to fetch profile",
+      });
+    }
+};
+
+const updateProfile =
+  async (req, res) => {
+
+    try {
+
+      const {
+        fullName,
+        avatar,
+      } = req.body;
+
+
+      const user =
+        await User.findById(
+          req.user.id
+        );
+
+
+      if (!user) {
+
+        return res.status(404).json({
+          success: false,
+          message:
+            "User not found",
+        });
+      }
+
+
+      if (fullName) {
+
+        user.fullName =
+          fullName;
+      }
+
+
+      if (avatar) {
+
+        user.avatar =
+          avatar;
+      }
+
+
+      await user.save();
+
+
+      return res.status(200).json({
+        success: true,
+        message:
+          "Profile updated successfully",
+
+        user,
+      });
+
+    } catch (error) {
+
+      console.error(error);
+
+      return res.status(500).json({
+        success: false,
+        message:
+          "Failed to update profile",
+      });
+    }
+};
 
 module.exports = {
   registerUser,
@@ -336,4 +467,7 @@ module.exports = {
   getPendingUsers,
   approveUser,
   rejectUser,
+  getApprovedUsers,
+  getMyProfile,
+  updateProfile,
 };

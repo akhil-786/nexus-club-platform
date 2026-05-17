@@ -11,6 +11,9 @@ const {
     getPendingUsers,
     approveUser,
     rejectUser,
+    getApprovedUsers,
+    getMyProfile,
+    updateProfile,
 } = require("../controllers/auth.controller");
 
 const router = express.Router();
@@ -37,12 +40,20 @@ router.put( "/reject-user/:id",
     rejectUser
 );
 
-router.get("/me", protect, (req, res) => {
-    return res.status(200).json({
-      success: true,
-      message: "Protected route accessed",
-      user: req.user,
-    });
-  });
+router.get("/approved-users",
+  protect,
+  authorizeRoles("club_admin","college_admin"),
+  getApprovedUsers
+)
+
+router.get("/me",
+  protect,
+  getMyProfile
+);
+
+router.put("/update-profile",
+protect,
+updateProfile
+);
 
 module.exports = router;
