@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const API =
-  "http://localhost:5000/api/auth";
+const API = `${import.meta.env.VITE_API_URL}/auth`;
 
 
 const getToken = () => {
@@ -15,16 +14,14 @@ const getToken = () => {
 export const getPendingRequests =
   async () => {
 
-    const response =
-      await axios.get(
-        `${API}/pending-users`,
+    const response =  await axios.get(`${API}/pending-users`,
         {
           headers: {
             Authorization:
               `Bearer ${getToken()}`
           }
         }
-      );
+    );
 
     return response.data;
 };

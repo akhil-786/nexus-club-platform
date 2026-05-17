@@ -1,21 +1,15 @@
 import axios from "axios";
 
-const API =
-  "http://localhost:5000/api/events";
+// const API = "http://localhost:5000/api/events";
+const API = `${import.meta.env.VITE_API_URL}/events`;
 
 
-  export const getClubEvents =
-  async () => {
+  export const getClubEvents = async () => {
 
-    const token =
-      localStorage.getItem(
-        "token"
-      );
+    const token = localStorage.getItem("token");
 
     const user = JSON.parse(
-      localStorage.getItem(
-        "user"
-      )
+      localStorage.getItem("user")
     );
 
     const response =
