@@ -137,3 +137,17 @@ export const createClubAdmin =  async (payload) => {
 
     return response.data;
 };
+
+export const getAllClubAdmins = async () => {
+    const token = localStorage.getItem("token"); 
+    const response = await axios.get(`${API}/admins`,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+    return response.data;
+};

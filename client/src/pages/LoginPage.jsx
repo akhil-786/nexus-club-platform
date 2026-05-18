@@ -25,9 +25,7 @@ const LoginPage = () => {
   };
 
 
-  const handleSubmit = async (
-    e
-  ) => {
+  const handleSubmit = async (e) => {
 
     e.preventDefault();
 
@@ -57,7 +55,7 @@ const LoginPage = () => {
       );
 
 
-      alert("Login successful!");
+      // alert("Login successful!");
 
 
       // ROLE-BASED REDIRECT
@@ -78,6 +76,15 @@ const LoginPage = () => {
 
         navigate(
           "/club-dashboard"
+        );
+      }
+
+      else if (
+        response.user.role === "college_admin"
+      ) {
+
+        navigate(
+          "/college-dashboard"
         );
       }
 
@@ -126,10 +133,7 @@ const LoginPage = () => {
         </p>
 
 
-        <form
-          className="auth-form"
-          onSubmit={handleSubmit}
-        >
+        <form className="auth-form" onSubmit={handleSubmit}>
 
           {/* EMAIL */}
           <div className="input-group">

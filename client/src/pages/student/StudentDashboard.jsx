@@ -152,9 +152,9 @@ import {
   
           <div>
   
-            <p className="dashboard-badge">
+            <div className="dashboard-role-badge">
               Student Dashboard
-            </p>
+          </div>
   
   
             <h1 className="dashboard-heading">

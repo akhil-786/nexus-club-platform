@@ -11,9 +11,11 @@ export const getClubEvents = async ( clubId ) => {
     const user = JSON.parse(
       localStorage.getItem("user")
     );
-
-    const response =
-      await axios.get(`${API}/club/${clubId}`,
+    let clubIdp = clubId;
+    if(!(user.role === "college_admin")){
+      clubIdp = user.clubId;
+    }
+    const response = await axios.get(`${API}/club/${clubIdp}`,
         {
           headers: {
             Authorization:

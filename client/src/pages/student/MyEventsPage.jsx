@@ -225,7 +225,7 @@ import {
                         <div>
   
                           <span className="workspace-event-status upcoming-status">
-                            registered
+                            {event.status}
                           </span>
   
   
@@ -314,7 +314,7 @@ import {
                         <div>
   
                           <span className="workspace-event-status completed-status">
-                            completed
+                            {event.status}
                           </span>
   
   

@@ -17,6 +17,7 @@ import StudentProfilePage from "../pages/student/StudentProfilePage";
 import CollegeDashboard from "../pages/collegeAdmin/CollegeDashboard";
 import ClubsPage from "../pages/collegeAdmin/ClubsPage";
 import ManageClubPage from "../pages/collegeAdmin/ManageClubPage";
+import ClubAdminsPage from "../pages/collegeAdmin/clubAdminsPage";
 
 const AppRoutes = () => {
     return (
@@ -138,6 +139,17 @@ const AppRoutes = () => {
                       ]}
                     >
                       <ManageClubPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/college-dashboard/club-admins"
+                  element={
+                    <ProtectedRoute
+                      allowedRoles={[
+                        "college_admin"
+                      ]}
+                    >
+                      <ClubAdminsPage />
                     </ProtectedRoute>
                   }
                 />

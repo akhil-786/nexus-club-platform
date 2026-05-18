@@ -89,9 +89,9 @@ const CollegeDashboard = () => {
 
         <div>
 
-          <p className="dashboard-badge">
+         <div className="dashboard-role-badge">
             College Administration
-          </p>
+          </div>
 
 
           <h1 className="dashboard-heading">
