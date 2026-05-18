@@ -233,8 +233,7 @@ const getAllClubs =
     }
 };
 
-const removeClubAdmin =
-  async (req, res) => {
+const removeClubAdmin = async (req, res) => {
 
     try {
 
@@ -495,6 +494,44 @@ const createClubAdmin =
     }
 };
 
+const getAllClubAdmins = async (req, res) => {
+
+    try {
+
+      const admins = await User.find({
+
+          role: "club_admin",
+
+          collegeId:
+            req.user.collegeId,
+
+        }).select("-password");
+
+
+      return res.status(200).json({
+
+        success: true,
+
+        admins,
+
+      });
+
+    } catch (error) {
+
+      console.log(
+  error.message
+);
+
+      return res.status(500).json({
+
+        success: false,
+
+        message:
+          "Server Error",
+      });
+    }
+};
+
 module.exports = {
   createClub,
   assignClubAdmin,
@@ -503,4 +540,5 @@ module.exports = {
   removeClubAdmin,
   deleteClub,
   createClubAdmin,
+  getAllClubAdmins,
 };
