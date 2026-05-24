@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-
+import { toast } from "react-toastify";
 import { loginUser } from "../services/authService";
 
 const LoginPage = () => {
@@ -56,46 +56,56 @@ const LoginPage = () => {
 
 
       // alert("Login successful!");
+      toast.success(
+        `Welcome back ${response.user.fullName}`
+      );
 
 
-      // ROLE-BASED REDIRECT
-      if (
-        response.user.role ===
-        "student"
-      ) {
+    setTimeout(() => {
 
-        navigate(
-          "/student-dashboard"
-        );
-      }
+  if (
+    response.user.role ===
+    "student"
+  ) {
 
-      else if (
-        response.user.role ===
-        "club_admin"
-      ) {
+    navigate(
+      "/student-dashboard"
+    );
+  }
 
-        navigate(
-          "/club-dashboard"
-        );
-      }
+  else if (
+    response.user.role ===
+    "club_admin"
+  ) {
 
-      else if (
-        response.user.role === "college_admin"
-      ) {
+    navigate(
+      "/club-dashboard"
+    );
+  }
 
-        navigate(
-          "/college-dashboard"
-        );
-      }
+  else if (
+    response.user.role ===
+    "college_admin"
+  ) {
+
+    navigate(
+      "/college-dashboard"
+    );
+  }
+
+}, 500);
 
     } catch (error) {
 
       console.error(error);
-
-      alert(
+      toast.error(
         error.response?.data?.message ||
         "Login failed"
       );
+      // alert(
+      //   error.response?.data?.message ||
+      //   "Login failed"
+      // );
     }
   };
 
@@ -194,6 +204,18 @@ const LoginPage = () => {
           </Link>
 
         </p>
+
+         <div className="auth-footer-text ">
+
+  <Link to="/forgot-password">
+
+    Forgot Password?
+
+  </Link>
+
+</div>
+
+       
 
       </motion.div>
 

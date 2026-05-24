@@ -1,12 +1,28 @@
 import DashboardLayout from "../../layouts/DashboardLayout";
+
 import AnalyticsCard from "../../components/AnalyticsCard";
+
 import InsightCard from "../../components/InsightCard";
-import { useEffect, useState } from "react";
-import { getClubEvents,getDashboardAnalytics } from "../../services/eventService";
+
 import EventWorkspaceCard from "../../components/EventWorkspaceCard";
+
 import ActivityFeedCard from "../../components/ActivityFeedCard";
+
 import AnalyticsChart from "../../components/AnalyticsChart";
-import { useNavigate } from "react-router-dom";
+
+import {
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  useNavigate,
+} from "react-router-dom";
+
+import {
+  getClubEvents,
+} from "../../services/eventService";
+
 
 const ClubAdminDashboard = () => {
 
@@ -14,72 +30,128 @@ const ClubAdminDashboard = () => {
     localStorage.getItem("user")
   );
 
-  const [events,setEvents] = useState([]);
 
-  const activities = [
-    {
+  const navigate =
+    useNavigate();
+
+
+  const [
+    events,
+    setEvents
+  ] = useState([]);
+
+
+  const activities =
+
+  events
+
+    .sort(
+
+      (a, b) =>
+
+        new Date(b.createdAt) -
+
+        new Date(a.createdAt)
+    )
+
+    .slice(0, 3)
+
+    .map((event) => ({
+
       title:
-        "Rahul Sharma registered for AI Workshop",
-      time: "2 hours ago",
-    },
-  
-    {
-      title:
-        "Attendance marked for Photography Walk",
-      time: "5 hours ago",
-    },
-  
-    {
-      title:
-        "New event created: Design Thinking Bootcamp",
-      time: "Yesterday",
-    },
-  ];
+
+        `${event.title} event created`,
+
+      time:
+
+        new Date(
+          event.createdAt
+        ).toLocaleDateString(),
+
+    }));
+
 
   useEffect(() => {
-    const fetchEvents = async () => {
-        try {
-            const data = await getClubEvents(user.clubId);
-            console.log(data);
-            setEvents(data.events);
-        } catch(error){
-            console.error(error);
-        }
+
+    fetchDashboardData();
+
+  }, []);
+
+
+  const fetchDashboardData =
+    async () => {
+
+      try {
+
+        const eventsData =
+          await getClubEvents(
+            user.clubId
+          );
+
+        setEvents(
+          eventsData.events || []
+        );
+
+      } catch (error) {
+
+        console.error(error);
+      }
     };
-    fetchEvents();
-  }, []);
 
 
+  const upcomingEvents = events.filter((event) =>
+        new Date(event.eventDate) > new Date()
+    );
 
-  const [analytics,setAnalytics] = useState(null);
 
-  useEffect(() => {
+  const completedEvents =
+    events.filter(
 
-    const fetchAnalytics = async () => {
-  
-        try {
-  
-          const data =
-            await getDashboardAnalytics();
-  
-          setAnalytics(data);
-  
-        } catch (error) {
-  
-          console.error(error);
-        }
-      };
-  
-    fetchAnalytics();
-  
-  }, []);
+      (event) =>
 
-  const navigate = useNavigate();
+        new Date(
+          event.eventDate
+        ) < new Date()
+    );
+
+
+  const totalRegistrations =
+    events.reduce(
+
+      (total, event) =>
+
+        total +
+
+        (
+          event.participants
+          ?.length || 0
+        ),
+
+      0
+    );
+
+
+  const totalAttendance =
+    events.reduce(
+
+      (total, event) =>
+
+        total +
+
+        (
+          event.attendance
+          ?.length || 0
+        ),
+
+      0
+    );
+
 
   return (
+
     <DashboardLayout>
 
-      {/* HERO SECTION */}
+      {/* HERO */}
 
       <section className="dashboard-hero">
 
@@ -87,8 +159,10 @@ const ClubAdminDashboard = () => {
 
         <div className="dashboard-hero-left">
 
-          <div className="dashboard-role-badge">
+          <div className="dashboard-badge">
+
             Club Administration
+
           </div>
 
 
@@ -97,8 +171,10 @@ const ClubAdminDashboard = () => {
             Welcome back,
 
             <span className="dashboard-highlight">
+
               {" "}
               {user?.fullName}
+
             </span>
 
           </h1>
@@ -121,24 +197,40 @@ const ClubAdminDashboard = () => {
         <div className="glass-card dashboard-hero-summary">
 
           <p className="hero-summary-label">
+
             Today's Activity
+
           </p>
 
 
           <h2 className="hero-summary-value">
-            3 Upcoming Events
+
+            {upcomingEvents.length}
+            {" "}
+            Upcoming Events
+
           </h2>
 
 
           <p className="hero-summary-text">
 
-            42 students registered
-            today across active events.
+            Manage registrations,
+            attendance, and student
+            engagement seamlessly.
 
           </p>
 
 
-          <button className="primary-btn" onClick={() => navigate("/club-dashboard/events" )}>
+          <button
+            className="primary-btn"
+
+            onClick={() =>
+
+              navigate(
+                "/club-dashboard/events"
+              )
+            }
+          >
             Create Event
           </button>
 
@@ -152,33 +244,57 @@ const ClubAdminDashboard = () => {
       <section className="analytics-grid">
 
         <AnalyticsCard
-          label="Total Members"
-          value={analytics?.totalEvent || 0}
-          growth="+12% this month"
+          label="Total Events"
+
+          value={events.length}
+
+          growth="Club activities"
         />
+
 
         <AnalyticsCard
           label="Upcoming Events"
-          value={events.length}
-          growth="3 scheduled this week"
+
+          value={
+            upcomingEvents.length
+          }
+
+          growth="Scheduled events"
         />
 
-        <AnalyticsCard
-          label="Attendance Rate"
-          value="92%"
-          growth="Excellent engagement"
-        />
 
         <AnalyticsCard
-          label="Pending Requests"
-          value="14"
-          growth="Awaiting approval"
+          label="Completed Events"
+
+          value={
+            completedEvents.length
+          }
+
+          growth="Successfully conducted"
+        />
+
+
+        <AnalyticsCard
+          label="Registrations"
+
+          value={
+            totalRegistrations
+          }
+
+          growth="Student participation"
         />
 
       </section>
+
+
+      {/* ANALYTICS CHART */}
+
       <section className="analytics-chart-section">
-<       AnalyticsChart />
-        </section>
+
+        <AnalyticsChart />
+
+      </section>
+
 
       {/* INSIGHTS */}
 
@@ -186,85 +302,146 @@ const ClubAdminDashboard = () => {
 
         <InsightCard
           title="Participation Trends"
+
           subtitle="Student engagement across events"
-          stat1Label="Avg Participation"
-          stat1Value="84%"
-          stat2Label="Growth"
-          stat2Value="+18%"
+
+          stat1Label="Upcoming"
+
+          stat1Value={
+            upcomingEvents.length
+          }
+
+          stat2Label="Completed"
+
+          stat2Value={
+            completedEvents.length
+          }
         />
 
 
         <InsightCard
-          title="Attendance Analytics"
-          subtitle="Attendance performance overview"
-          stat1Label="Average Attendance"
-          stat1Value="92%"
-          stat2Label="Events Conducted"
-          stat2Value="24"
+          title="Club Performance"
+
+          subtitle="Overall event performance"
+
+          stat1Label="Total Events"
+
+          stat1Value={
+            events.length
+          }
+
+          stat2Label="Registrations"
+
+          stat2Value={
+            totalRegistrations
+          }
         />
 
       </section>
 
-            {/* Workspace SECTION */}
-        <section className="workspace-section">
 
-          <div className="workspace-header">
+      {/* UPCOMING EVENTS */}
 
-            <h2 className="workspace-title">
-              Upcoming Events
+      <section className="workspace-section">
+
+        <div className="workspace-header">
+
+          <h2 className="workspace-title">
+
+            Upcoming Events
+
+          </h2>
+
+        </div>
+
+
+        {upcomingEvents.length === 0 ? (
+
+          <div className="empty-events-state glass-card">
+
+            <h2 className="empty-events-title">
+
+              No Upcoming Events
+
             </h2>
+
+
+            <p className="empty-events-text">
+
+              Create new events to
+              engage students and
+              grow participation.
+
+            </p>
 
           </div>
 
+        ) : (
 
           <div className="workspace-grid">
 
-          {events.sort((a, b) =>
-              new Date(a.eventDate) -
-              new Date(b.eventDate)
-          )
-          .slice(0, 2)
-          .map((event) => (
-        
-              <EventWorkspaceCard
-                key={event._id}
-                event={event}
-                redirectMode={true}
-              />
-        
-            ))}
+            {upcomingEvents
+
+              .sort((a, b) =>
+
+                new Date(a.eventDate) -
+
+                new Date(b.eventDate)
+              )
+
+              .slice(0, 2)
+
+              .map((event) => (
+
+                <EventWorkspaceCard
+                  key={event._id}
+
+                  event={event}
+
+                  redirectMode={true}
+                />
+
+              ))}
 
           </div>
-        
-        </section>
-        {/* Recent Activity SECTION */}
-        <section className="activity-section">
 
-  <div className="workspace-header">
+        )}
 
-    <h2 className="workspace-title">
-      Recent Activity
-    </h2>
-
-  </div>
+      </section>
 
 
-  <div className="activity-grid">
+      {/* RECENT ACTIVITY */}
 
-    {activities.map(
-      (activity, index) => (
+      <section className="activity-section">
 
-        <ActivityFeedCard
-          key={index}
-          activity={activity}
-        />
+        <div className="workspace-header">
 
-      )
-    )}
+          <h2 className="workspace-title">
 
-  </div>
+            Recent Activity
 
-</section>
+          </h2>
+
+        </div>
+
+
+        <div className="activity-grid">
+
+          {activities.map(
+            (activity, index) => (
+
+              <ActivityFeedCard
+                key={index}
+
+                activity={activity}
+              />
+
+            )
+          )}
+
+        </div>
+
+      </section>
 
     </DashboardLayout>
   );

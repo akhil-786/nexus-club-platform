@@ -1,91 +1,180 @@
-const mongoose = require('mongoose');
+const mongoose =  require("mongoose");
 
-const userSchema = new mongoose.Schema(
+const userSchema =  new mongoose.Schema(
     {
-        fullName: {
-            type : String,
-            required: true,
-            trim: true,
-        },
+      fullName: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      email: {
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true,
+        trim: true,
+      },
+      rollNumber: {
 
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-            lowercase: true,
-            trim: true,
-        },
+        type: String,
 
-        rollNumber: {
-          type: String,
-          required: true,
-          uppercase: true,
-          trim: true,
-        },
-        
-        department: {
-          type: String,
-          required: true,
-          trim: true,
-          uppercase: true,
-        },
-        
-        year: {
-          type: Number,
-          required: true,
-          min: 1,
-          max: 4,
-        },
+        required: true,
 
-        password: {
-            type : String,
-            required: true,
-            minlength: 6,
-        },
+        uppercase: true,
 
-        role: {
-            type: String,
-            enum: [
-                "super_admin",
-                "college_admin",
-                "faculty",
-                "club_admin",
-                "student",
-            ],
-            default: "student",
-        },
+        trim: true,
+      },
 
-        collegeId: {
-            type: String,
-            default: true,
-        },
 
-        clubId: {
-            type: String,
-            required: true,
-        },
+      department: {
 
-        status: {
-            type: String,
-            enum: [
-                "pending",
-                "approved",
-                "rejected",
-                "suspended",
-            ],
-            default: "pending",
-        },
+        type: String,
 
-        avatar: {
-            type: String,
-            default: "",
-        },
+        required: true,
+
+        trim: true,
+
+        uppercase: true,
+      },
+
+
+      year: {
+
+        type: Number,
+
+        required: true,
+
+        min: 1,
+
+        max: 4,
+      },
+
+
+      password: {
+
+        type: String,
+
+        required: true,
+
+        minlength: 8,
+      },
+
+
+      role: {
+
+        type: String,
+
+        enum: [
+
+          "super_admin",
+
+          "college_admin",
+
+          "faculty",
+
+          "club_admin",
+
+          "student",
+        ],
+
+        default: "student",
+      },
+
+
+      collegeId: {
+
+        type: String,
+
+        default: "",
+      },
+
+
+      clubId: {
+
+        type: String,
+
+        required: true,
+      },
+
+
+      status: {
+
+        type: String,
+
+        enum: [
+
+          "pending",
+
+          "approved",
+
+          "rejected",
+
+          "suspended",
+        ],
+
+        default: "pending",
+      },
+
+
+      avatar: {
+
+        type: String,
+
+        default: "",
+      },
+
+
+      /* ======================================
+         EMAIL VERIFICATION
+      ====================================== */
+
+      isVerified: {
+
+        type: Boolean,
+
+        default: false,
+      },
+
+
+      emailVerificationToken: {
+
+        type: String,
+      },
+
+
+      emailVerificationExpire: {
+
+        type: Date,
+      },
+
+
+      /* ======================================
+         FORGOT PASSWORD
+      ====================================== */
+
+      resetPasswordToken: {
+
+        type: String,
+      },
+
+
+      resetPasswordExpire: {
+
+        type: Date,
+      },
+
     },
+
     {
-        timestamps: true,
+
+      timestamps: true,
     }
 );
 
-const User = mongoose.model("User",userSchema);
+const User =
+  mongoose.model(
+    "User",
+    userSchema
+  );
 
 module.exports = User;

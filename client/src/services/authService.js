@@ -65,3 +65,16 @@ export const getCollegeAnalytics = async () => {
       );
     return response.data;
 };
+
+export const forgotPassword = async (payload) => {
+
+    const response = await api.post( "/auth/forgot-password", payload );
+
+    return response.data;
+};
+
+export const resetPassword = async (token, payload) => {
+    const response = await api.post(`/auth/reset-password/${token}`, payload);
+
+    return response.data;
+};

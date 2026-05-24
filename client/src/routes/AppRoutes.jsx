@@ -18,6 +18,8 @@ import CollegeDashboard from "../pages/collegeAdmin/CollegeDashboard";
 import ClubsPage from "../pages/collegeAdmin/ClubsPage";
 import ManageClubPage from "../pages/collegeAdmin/ManageClubPage";
 import ClubAdminsPage from "../pages/collegeAdmin/clubAdminsPage";
+import ForgotPasswordPage from "../pages/ForgotPasswordPage";
+import ResetPasswordPage from "../pages/ResetPasswordPage";
 
 const AppRoutes = () => {
     return (
@@ -26,6 +28,9 @@ const AppRoutes = () => {
                 <Route path="/" element= {<LandingPage/>} />
                 <Route path="/login" element={<LoginPage/>} />
                 <Route path="/register" element={<RegisterPage/>}/>
+                <Route path="/forgot-password" element={<ForgotPasswordPage/>} />
+                <Route path="/reset-password/:token" element={<ResetPasswordPage/>}
+/>
                
                 <Route path="/student-dashboard" 
                     element={<ProtectedRoute allowedRoles={["student"]}>

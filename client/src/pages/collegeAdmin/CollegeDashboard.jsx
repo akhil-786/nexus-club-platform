@@ -3,16 +3,30 @@ import {
   useState,
 } from "react";
 
-import DashboardLayout from "../../layouts/DashboardLayout";
+import {
+  useNavigate,
+} from "react-router-dom";
 
-import AnalyticsCard from "../../components/AnalyticsCard";
+import DashboardLayout
+from "../../layouts/DashboardLayout";
 
-import { getClubs, } from "../../services/clubService";
+import AnalyticsCard
+from "../../components/AnalyticsCard";
 
-import { getCollegeAnalytics, } from "../../services/authService";
+import {
+  getClubs,
+} from "../../services/clubService";
+
+import {
+  getCollegeAnalytics,
+} from "../../services/authService";
 
 
 const CollegeDashboard = () => {
+
+  const navigate =
+    useNavigate();
+
 
   const user = JSON.parse(
     localStorage.getItem("user")
@@ -31,7 +45,10 @@ const CollegeDashboard = () => {
   ] = useState({
 
     totalStudents: 0,
+
     totalClubAdmins: 0,
+
+    totalActiveEvents: 0,
 
   });
 
@@ -66,7 +83,7 @@ const CollegeDashboard = () => {
           await getCollegeAnalytics();
 
         setAnalytics(
-          analyticsData.analytics
+          analyticsData.analytics || {}
         );
 
       } catch (error) {
@@ -81,6 +98,7 @@ const CollegeDashboard = () => {
 
 
   return (
+
     <DashboardLayout>
 
       {/* HERO */}
@@ -89,8 +107,10 @@ const CollegeDashboard = () => {
 
         <div>
 
-         <div className="dashboard-role-badge">
+          <div className="dashboard-badge">
+
             College Administration
+
           </div>
 
 
@@ -133,7 +153,7 @@ const CollegeDashboard = () => {
         <AnalyticsCard
           label="Club Admins"
           value={
-            analytics.totalClubAdmins
+            analytics?.totalClubAdmins || 0
           }
           growth="Management layer"
         />
@@ -142,7 +162,7 @@ const CollegeDashboard = () => {
         <AnalyticsCard
           label="Students"
           value={
-            analytics.totalStudents
+            analytics?.totalStudents || 0
           }
           growth="Platform users"
         />
@@ -150,7 +170,9 @@ const CollegeDashboard = () => {
 
         <AnalyticsCard
           label="Events"
-          value={analytics.totalActiveEvents}
+          value={
+            analytics?.totalActiveEvents || 0
+          }
           growth="Campus activities"
         />
 
@@ -164,7 +186,9 @@ const CollegeDashboard = () => {
         <div className="workspace-header">
 
           <h2 className="workspace-title">
+
             Active Clubs
+
           </h2>
 
         </div>
@@ -173,7 +197,9 @@ const CollegeDashboard = () => {
         {loading ? (
 
           <p className="events-loading">
+
             Loading clubs...
+
           </p>
 
         ) : clubs.length === 0 ? (
@@ -181,7 +207,9 @@ const CollegeDashboard = () => {
           <div className="empty-events-state glass-card">
 
             <h2 className="empty-events-title">
+
               No Clubs Created
+
             </h2>
 
 
@@ -214,12 +242,16 @@ const CollegeDashboard = () => {
                     <div>
 
                       <span className="workspace-event-status upcoming-status">
-                        active
+
+                        Active
+
                       </span>
 
 
                       <h2 className="workspace-event-title">
+
                         {club.name}
+
                       </h2>
 
                     </div>
@@ -239,7 +271,9 @@ const CollegeDashboard = () => {
                     <div>
 
                       <p className="workspace-event-venue">
+
                         {club.category}
+
                       </p>
 
                     </div>
@@ -247,6 +281,14 @@ const CollegeDashboard = () => {
 
                     <button
                       className="secondary-btn"
+
+                      onClick={() =>
+
+                        navigate(
+
+                          `/college-dashboard/clubs/${club._id}`
+                        )
+                      }
                     >
                       Manage
                     </button>

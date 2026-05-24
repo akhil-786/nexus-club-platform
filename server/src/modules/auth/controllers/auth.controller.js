@@ -1,219 +1,708 @@
 const bcrypt = require("bcryptjs");
 const validator = require("validator");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
-const User = require("../models/user.model");
+const User =
+  require("../models/user.model");
 
-const Club = require("../../clubs/models/club.model");
+const Club =
+  require("../../clubs/models/club.model");
 
-const Event =  require( "../../events/models/event.model");
+const Event =
+  require("../../events/models/event.model");
 
-const registerUser = async (req, res) => {
-  try {
-    const {
-      fullName,
-      email,
-      password,
-      rollNumber,
-      department,
-      year,
-      collegeId,
-      clubId,
-    } = req.body;
+const transporter = require("../../../config/mail");
 
 
-    // Validation
-    if (
-      !fullName ||
-      !email ||
-      !password ||
-      !rollNumber ||
-      !department ||
-      !year ||
-      !collegeId ||
-      !clubId
-    ){
-      return res.status(400).json({
-        success: false,
-        message: "All fields are required",
-      });
-    }
+/* =====================================================
+   REGISTER USER
+===================================================== */
+
+const registerUser =
+  async (req, res) => {
+
+    try {
+
+      const {
+
+        fullName,
+        email,
+        password,
+        rollNumber,
+        department,
+        year,
+        collegeId,
+        clubId,
+
+      } = req.body;
 
 
-    // Email Validation
-    if (!validator.isEmail(email)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid email format",
-      });
-    }
+      /* VALIDATION */
+
+      if (
+
+        !fullName ||
+        !email ||
+        !password ||
+        !rollNumber ||
+        !department ||
+        !year ||
+        !collegeId ||
+        !clubId
+
+      ) {
+
+        return res.status(400)
+          .json({
+
+            success: false,
+
+            message:
+              "All fields are required",
+          });
+      }
 
 
-    // Password Length
-    if (password.length < 6) {
-      return res.status(400).json({
-        success: false,
-        message: "Password must be at least 6 characters",
-      });
-    }
+      /* EMAIL VALIDATION */
+
+      if (
+        !validator.isEmail(email)
+      ) {
+
+        return res.status(400)
+          .json({
+
+            success: false,
+
+            message:
+              "Invalid email format",
+          });
+      }
 
 
-    // Check Existing User
-    const existingUser = await User.findOne({ email });
+      /* PASSWORD VALIDATION */
 
-    if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        message: "User already exists",
-      });
-    }
+      const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
 
 
-    // Hash Password
-    const hashedPassword = await bcrypt.hash(password, 10);
+      if (
+        !passwordRegex.test(password)
+      ) {
+
+        return res.status(400)
+          .json({
+
+            success: false,
+
+            message:
+
+              "Password must contain uppercase, lowercase, number, special character and minimum 8 characters",
+          });
+      }
 
 
-    // Create User
-    const user = await User.create({
-      email,
-      fullName,
-      password: hashedPassword,
-      rollNumber,
-      department,
-      year,
-      collegeId,
-      clubId,
-    });
+      /* EXISTING USER */
+
+      const existingUser =
+        await User.findOne({
+          email,
+        });
 
 
-    const safeUser = {
-        _id: user._id,
-        fullName: user.fullName,
-        email: user.email,
-        role: user.role,
-        rollNumber: user.rollNumber,
-        department: user.department,
-        year: user.year,
-        collegeId: user.collegeId,
-        clubId: user.clubId,
-        status: user.status,
-        avatar: user.avatar,
+      if (existingUser) {
+
+        return res.status(400)
+          .json({
+
+            success: false,
+
+            message:
+              "User already exists",
+          });
+      }
+
+
+      /* HASH PASSWORD */
+
+      const hashedPassword =
+        await bcrypt.hash(
+          password,
+          10
+        );
+
+
+      /* CREATE USER */
+
+      const user =
+        await User.create({
+
+          fullName,
+
+          email,
+
+          password:
+            hashedPassword,
+
+          rollNumber,
+
+          department,
+
+          year,
+
+          collegeId,
+
+          clubId,
+        });
+
+
+      const safeUser = {
+
+        _id:
+          user._id,
+
+        fullName:
+          user.fullName,
+
+        email:
+          user.email,
+
+        role:
+          user.role,
+
+        rollNumber:
+          user.rollNumber,
+
+        department:
+          user.department,
+
+        year:
+          user.year,
+
+        collegeId:
+          user.collegeId,
+
+        clubId:
+          user.clubId,
+
+        status:
+          user.status,
+
+        avatar:
+          user.avatar,
       };
-      
-      return res.status(201).json({
-        success: true,
-        message:
-          "Registration successful. Awaiting admin approval.",
-        user: safeUser,
-      });
 
-  } catch (error) {
-    console.error(error);
 
-    return res.status(500).json({
-      success: false,
-      message: "Server Error",
-    });
-  }
+      return res.status(201)
+        .json({
+
+          success: true,
+
+          message:
+
+            "Registration successful. Awaiting admin approval.",
+
+          user:
+            safeUser,
+        });
+
+    } catch (error) {
+
+      console.error(error);
+
+      return res.status(500)
+        .json({
+
+          success: false,
+
+          message:
+            "Server Error",
+        });
+    }
 };
 
-const loginUser = async (req, res) => {
+
+/* =====================================================
+   LOGIN USER
+===================================================== */
+
+const loginUser =
+  async (req, res) => {
+
     try {
-        const {email, password } = req.body;
 
-        if(!email || !password){
-            return res.status(400).json({
-                success: false,
-                message: "Email and password are required",
-            });
-        }
+      const {
+        email,
+        password,
+      } = req.body;
 
-        const user = await User.findOne({email});
 
-        if(!user){
-            return res.status(400).json({
-                success: false,
-                message: "Invalid credentials",
-            });
-        }
+      if (
+        !email ||
+        !password
+      ) {
 
-        const isPasswordMatched = await bcrypt.compare(
-            password,
-            user.password
-        );
+        return res.status(400)
+          .json({
 
-        if (!isPasswordMatched) {
-            return res.status(400).json({
-                success: false,
-                message: "Invalid credentials",
-            });
-        }
+            success: false,
 
-        if(user.status === "pending"){
-            return res.status(403).json({
-                success: false,
-                message: "Your account is awaiting admin approval",
-            });
-        }
+            message:
 
-        if(user.status === "rejected"){
-            return res.status(403).json({
-                success: false,
-                message:
-                  "Your registration was rejected",
-              });
-        }
-
-        if (user.status === "suspended") {
-            return res.status(403).json({
-              success: false,
-              message:
-                "Your account has been suspended",
-            });
-        }
-
-        const token = jwt.sign(
-          {
-            id: user._id,
-            role: user.role,
-            collegeId: user.collegeId,
-            clubId: user.clubId,
-          },
-            process.env.JWT_SECRET,
-            {
-                expiresIn: "7d",
-            }
-        );
-
-        const safeUser = {
-            _id: user._id,
-            fullName: user.fullName,
-            email: user.email,
-            role: user.role,
-            rollNumber: user.rollNumber,
-            department: user.department,
-            year: user.year,
-            collegeId: user.collegeId,
-            clubId: user.clubId,
-            status: user.status,
-            avatar: user.avatar,
-        };
-
-        return res.status(200).json({
-            success: true,
-            message: "Login successful",
-            token,
-            user: safeUser,
-        });  
-    } 
-    catch (error) {
-        console.error(error);
-    
-        return res.status(500).json({
-          success: false,
-          message: "Server Error",
-        });
+              "Email and password are required",
+          });
       }
+
+
+      const user =
+        await User.findOne({
+          email,
+        });
+
+
+      if (!user) {
+
+        return res.status(400)
+          .json({
+
+            success: false,
+
+            message:
+              "Invalid credentials",
+          });
+      }
+
+
+      const isPasswordMatched =
+        await bcrypt.compare(
+
+          password,
+
+          user.password
+        );
+
+
+      if (!isPasswordMatched) {
+
+        return res.status(400)
+          .json({
+
+            success: false,
+
+            message:
+              "Invalid credentials",
+          });
+      }
+
+
+      if (
+        user.status ===
+        "pending"
+      ) {
+
+        return res.status(403)
+          .json({
+
+            success: false,
+
+            message:
+
+              "Your account is awaiting admin approval",
+          });
+      }
+
+
+      if (
+        user.status ===
+        "rejected"
+      ) {
+
+        return res.status(403)
+          .json({
+
+            success: false,
+
+            message:
+
+              "Your registration was rejected",
+          });
+      }
+
+
+      if (
+        user.status ===
+        "suspended"
+      ) {
+
+        return res.status(403)
+          .json({
+
+            success: false,
+
+            message:
+
+              "Your account has been suspended",
+          });
+      }
+
+
+      /* JWT TOKEN */
+
+      const token =
+        jwt.sign(
+
+          {
+
+            id:
+              user._id,
+
+            role:
+              user.role,
+
+            collegeId:
+              user.collegeId,
+
+            clubId:
+              user.clubId,
+          },
+
+          process.env.JWT_SECRET,
+
+          {
+
+            expiresIn:
+              "7d",
+          }
+        );
+
+
+      const safeUser = {
+
+        _id:
+          user._id,
+
+        fullName:
+          user.fullName,
+
+        email:
+          user.email,
+
+        role:
+          user.role,
+
+        rollNumber:
+          user.rollNumber,
+
+        department:
+          user.department,
+
+        year:
+          user.year,
+
+        collegeId:
+          user.collegeId,
+
+        clubId:
+          user.clubId,
+
+        status:
+          user.status,
+
+        avatar:
+          user.avatar,
+      };
+
+
+      return res.status(200)
+        .json({
+
+          success: true,
+
+          message:
+            "Login successful",
+
+          token,
+
+          user:
+            safeUser,
+        });
+
+    } catch (error) {
+
+      console.error(error);
+
+      return res.status(500)
+        .json({
+
+          success: false,
+
+          message:
+            "Server Error",
+        });
+    }
+};
+
+
+/* =====================================================
+   FORGOT PASSWORD
+===================================================== */
+
+const forgotPassword =
+  async (req, res) => {
+
+    try {
+
+      const { email } =
+        req.body;
+
+
+      const user =
+        await User.findOne({
+          email,
+        });
+
+
+      if (!user) {
+
+        return res.status(404)
+          .json({
+
+            success: false,
+
+            message:
+              "User not found",
+          });
+      }
+
+
+      const resetToken =
+
+        crypto
+          .randomBytes(32)
+          .toString("hex");
+
+
+      user.resetPasswordToken =
+        resetToken;
+
+
+      user.resetPasswordExpire =
+
+        Date.now() +
+
+        15 * 60 * 1000;
+
+
+      await user.save();
+
+
+      const resetUrl =
+
+        `http://localhost:5173/reset-password/${resetToken}`;
+
+
+      await transporter.sendMail({
+
+        from:
+          process.env.EMAIL_USER,
+
+        to:
+          user.email,
+
+        subject:
+          "Password Reset Request",
+
+        html: `
+
+          <div
+            style="
+              font-family:
+              Arial,sans-serif;
+              padding:20px;
+            "
+          >
+
+            <h2>
+              Reset Your Password
+            </h2>
+
+            <p>
+
+              Click the button below
+              to reset your password.
+
+            </p>
+
+            <a
+              href="${resetUrl}"
+
+              style="
+                display:inline-block;
+                padding:12px 20px;
+                background:#2563eb;
+                color:white;
+                text-decoration:none;
+                border-radius:8px;
+                margin-top:12px;
+              "
+            >
+
+              Reset Password
+
+            </a>
+
+            <p
+              style="
+                margin-top:20px;
+                color:#64748b;
+              "
+            >
+
+              This link expires in
+              15 minutes.
+
+            </p>
+
+          </div>
+        `,
+      });
+
+
+      return res.status(200)
+        .json({
+
+          success: true,
+
+          message:
+
+            "Reset password link sent to email",
+        });
+
+    } catch (error) {
+
+      console.error(error);
+
+      return res.status(500)
+        .json({
+
+          success: false,
+
+          message:
+            "Server Error",
+        });
+    }
+};
+
+
+/* =====================================================
+   RESET PASSWORD
+===================================================== */
+
+const resetPassword =
+  async (req, res) => {
+
+    try {
+
+      const { token } =
+        req.params;
+
+
+      const { password } =
+        req.body;
+
+
+      const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+
+      if (
+        !passwordRegex.test(password)
+      ) {
+
+        return res.status(400)
+          .json({
+
+            success: false,
+
+            message:
+
+              "Password must contain uppercase, lowercase, number, special character and minimum 8 characters",
+          });
+      }
+
+
+      const user =
+        await User.findOne({
+
+          resetPasswordToken:
+            token,
+
+          resetPasswordExpire: {
+            $gt: Date.now(),
+          },
+        });
+
+
+      if (!user) {
+
+        return res.status(400)
+          .json({
+
+            success: false,
+
+            message:
+
+              "Invalid or expired token",
+          });
+      }
+
+
+      const hashedPassword =
+        await bcrypt.hash(
+          password,
+          10
+        );
+
+
+      user.password =
+        hashedPassword;
+
+
+      user.resetPasswordToken =
+        undefined;
+
+
+      user.resetPasswordExpire =
+        undefined;
+
+
+      await user.save();
+
+
+      return res.status(200)
+        .json({
+
+          success: true,
+
+          message:
+
+            "Password reset successful",
+        });
+
+    } catch (error) {
+
+      console.error(error);
+
+      return res.status(500)
+        .json({
+
+          success: false,
+
+          message:
+            "Server Error",
+        });
+    }
 };
 
 const getPendingUsers = async (req,res) => {
@@ -529,6 +1018,8 @@ const getCollegeAnalytics = async (req, res) => {
 module.exports = {
   registerUser,
   loginUser,
+  forgotPassword,
+  resetPassword,
   getPendingUsers,
   approveUser,
   rejectUser,

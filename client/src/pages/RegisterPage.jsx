@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { registerUser } from "../services/authService";
+import { toast } from "react-toastify";
 
 
 const RegisterPage = () => {
@@ -18,6 +19,7 @@ const RegisterPage = () => {
       clubId: "",
     });
 
+  const [passwordError,setPasswordError] = useState(false);
 
   const handleChange = (e) => {
 
@@ -26,16 +28,40 @@ const RegisterPage = () => {
       [e.target.name]:
         e.target.value,
     });
+    if (e.target.name ==="password") {
+      setPasswordError(false);
+    }
   };
 
+  const validatePassword = (password) => {
 
-  const handleSubmit = async (
-    e
-  ) => {
+    const regex =/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+    return regex.test(password);
+};
+
+
+  const handleSubmit = async (e) => {
 
     e.preventDefault();
 
     try {
+      if (
+  !validatePassword(
+    formData.password
+  )
+) {
+
+  setPasswordError(true);
+
+  toast.error(
+
+    "Password must contain uppercase, lowercase, number, special character and minimum 8 characters"
+
+  );
+
+  return;
+}
 
       const response =
         await registerUser(
@@ -51,11 +77,15 @@ const RegisterPage = () => {
     } catch (error) {
 
       console.error(error);
-
-      alert(
+      toast.error(
         error.response?.data?.message ||
         "Registration failed"
       );
+      //
+      // alert(
+      //   error.response?.data?.message ||
+      //   "Registration failed"
+      // );
     }
   };
 
@@ -277,7 +307,8 @@ const RegisterPage = () => {
             </div>
 
 
-            {/* PASSWORD */}
+         {/* PASSWORD */}
+
             <div className="input-group">
 
               <label className="input-label">
@@ -286,13 +317,32 @@ const RegisterPage = () => {
 
               <input
                 type="password"
+
                 name="password"
+
                 value={formData.password}
+
                 onChange={handleChange}
+
                 placeholder="Create password"
-                className="auth-input"
+
+                className={`auth-input ${
+                  passwordError
+                    ? "input-error"
+                    : ""
+                }`}
               />
 
+              
+              <p className="password-hint">
+              
+                Must contain uppercase,
+                lowercase, number,
+                special character and
+                minimum 8 characters.
+              
+              </p>
+              
             </div>
 
           </div>

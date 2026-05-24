@@ -11,6 +11,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import { toast } from "react-toastify";  
 
 
 const DashboardNavbar = () => {
@@ -47,6 +48,9 @@ const DashboardNavbar = () => {
         "user"
       );
 
+      toast.success(
+        "Logged out successfully"
+      );
       navigate("/login");
   };
 
