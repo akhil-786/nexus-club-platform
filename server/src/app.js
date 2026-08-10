@@ -66,6 +66,13 @@ app.use("/api/events", eventRoutes);
 
 
 // Health Check
+// Health Check 
+app.get("/api/health", (req, res) => { 
+  res.status(200).json({ 
+    success: true, status: "healthy", 
+    message: "Nexus Club API is running", 
+    timestamp: new Date().toISOString(), }); 
+});
 
 app.get("/", (req, res) => {
 
